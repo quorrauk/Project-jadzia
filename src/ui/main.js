@@ -1,5 +1,6 @@
 import { createStore, MAX_PROFILES } from '../progress/store.js';
 import { LEVELS, levelInfo } from '../progress/levels.js';
+import { mountWorkshop } from '../sandbox/sandbox.js';
 
 const app = document.getElementById('app');
 
@@ -35,11 +36,31 @@ function levelPill(level) {
 }
 
 function start(config, store) {
+  let workshop = null;
+
   function render() {
+    if (workshop) {
+      workshop.unmount();
+      workshop = null;
+    }
+    document.body.classList.remove('wide');
     const active = store.getActive();
     if (active) return renderHome(active);
     if (store.listProfiles().length === 0) return renderRecruitment(true);
     return renderPicker();
+  }
+
+  function renderWorkshop(profile) {
+    app.replaceChildren();
+    document.body.classList.add('wide');
+    const holder = el('div');
+    app.append(holder);
+    workshop = mountWorkshop(holder, {
+      profile,
+      onSave: (board) => store.updateProfile(profile.id, { workshop: board }),
+      onLevelChange: (level) => store.updateProfile(profile.id, { level }),
+      onExit: () => render(),
+    });
   }
 
   // ------------------------------------------------------------ who's flying
@@ -163,6 +184,7 @@ function start(config, store) {
 
     const actions = el('div', { class: 'row' });
     actions.append(
+      button('Open workshop', 'open-workshop', () => renderWorkshop(store.getActive())),
       button(profile.guest ? 'Leave guest mode' : 'Switch candidate', 'switch-profile', () => {
         store.leave();
         render();

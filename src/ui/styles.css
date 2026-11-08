@@ -190,3 +190,162 @@ button.secondary {
   border: 1px solid var(--warn);
   border-radius: 10px;
 }
+
+/* ---- workshop ---- */
+
+body.wide #app { max-width: 1280px; }
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.workshop { display: grid; gap: 12px; }
+
+.ws-top { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.ws-top h1 { flex: 1; margin: 0; font-size: 1.4rem; }
+.ws-top button, .ws-top select { margin: 0; min-height: 44px; }
+.ws-level select {
+  padding: 0 12px;
+  color: var(--text);
+  background: #060a18;
+  border: 1px solid var(--panel-edge);
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.ws-status {
+  min-height: 44px;
+  margin: 0;
+  padding: 10px 14px;
+  background: #0a1128;
+  border: 1px solid var(--panel-edge);
+  border-radius: 10px;
+}
+.ws-status[data-tone="good"] { color: var(--ok); border-color: var(--ok); }
+.ws-status[data-tone="warn"] { color: var(--warn); border-color: var(--warn); }
+.ws-status[data-tone="bad"] { color: #ff9a9a; border-color: #ff6b6b; }
+
+.ws-help {
+  padding: 16px 20px;
+  background: var(--panel);
+  border: 1px solid var(--glow);
+  border-radius: 12px;
+}
+.ws-help h2 { margin: 0 0 8px; font-size: 1.1rem; color: var(--glow); }
+.ws-help ol { margin: 0 0 8px; padding-left: 20px; }
+.ws-help[hidden] { display: none; }
+
+.ws-main { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 1000px) {
+  .ws-main { grid-template-columns: minmax(0, 1fr) 340px; align-items: start; }
+}
+
+.ws-boardwrap {
+  overflow: hidden;
+  background: #060a18;
+  border: 1px solid var(--panel-edge);
+  border-radius: 12px;
+}
+.board { display: block; width: 100%; height: auto; touch-action: pinch-zoom; user-select: none; -webkit-user-select: none; }
+
+.ws-side { display: grid; gap: 12px; }
+.ws-palette {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+  gap: 8px;
+  padding: 10px;
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 12px;
+}
+/* On narrower screens the palette is a drawer that stays at the bottom of the screen. */
+@media (max-width: 999px) {
+  .ws-side { display: flex; flex-direction: column; }
+  .ws-readout { order: 1; }
+  .ws-props { order: 2; }
+  .ws-actions { order: 3; }
+  .ws-palette { order: 4; position: sticky; bottom: 0; z-index: 5; box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.5); }
+}
+
+.palette-item {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  min-height: 64px;
+  margin: 0;
+  padding: 6px;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: #0a1128;
+  border: 1px solid var(--panel-edge);
+  touch-action: none;
+}
+.palette-item[aria-pressed="true"] { border-color: var(--glow); box-shadow: inset 0 0 0 2px var(--glow); }
+.palette-item .preview { width: 84px; height: 32px; }
+
+.ws-props, .ws-readout {
+  padding: 12px 14px;
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 12px;
+}
+.ws-props p { margin: 4px 0 8px; }
+.ws-readout ul { margin: 6px 0 0; padding-left: 18px; max-height: 260px; overflow: auto; }
+.ws-readout li { margin: 2px 0; font-variant-numeric: tabular-nums; }
+.ws-actions button { margin-top: 0; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+.chip {
+  min-height: 44px;
+  margin: 0;
+  padding: 6px 12px;
+  color: var(--text);
+  background: #0a1128;
+  border: 1px solid var(--panel-edge);
+}
+.chip[aria-pressed="true"] { border-color: var(--glow); box-shadow: inset 0 0 0 2px var(--glow); }
+.swatch { display: inline-block; width: 14px; height: 14px; margin-right: 6px; vertical-align: -2px; border: 1px solid #fff4; border-radius: 50%; }
+.slider { display: block; margin: 8px 0; }
+.slider input { width: 100%; min-height: 44px; padding: 0; }
+
+/* board drawing */
+.circuit .dot { fill: #1c2b5c; }
+.circuit .board-edge { fill: none; stroke: #24325f; stroke-dasharray: 6 8; }
+.circuit .empty-hint { fill: var(--muted); font-size: 26px; pointer-events: none; }
+.circuit .empty-hint.small { font-size: 20px; }
+.circuit .lead, .circuit .plate, .circuit .lever, .circuit .filament, .circuit .arrow { fill: none; stroke: var(--text); stroke-width: 4; stroke-linecap: round; }
+.circuit .plate.long { stroke-width: 5; }
+.circuit .plate.short { stroke-width: 9; }
+.circuit .body { fill: none; stroke: var(--glow); stroke-width: 4; stroke-linejoin: round; }
+.circuit .bar, .circuit .ray { fill: none; stroke-width: 4; stroke-linecap: round; }
+.circuit .filament { stroke: var(--glow); stroke-width: 3; }
+.circuit .lever.closed { stroke: var(--ok); }
+.circuit .contact { fill: var(--text); }
+.circuit .arrowhead { fill: var(--text); }
+.circuit .sign { fill: var(--glow); font-size: 24px; font-weight: 700; }
+.circuit .part-id { fill: var(--muted); font-size: 16px; }
+.circuit .part-value { fill: var(--text); font-size: 18px; }
+.circuit .rays line { stroke-width: 3; stroke-linecap: round; }
+.circuit .glow { pointer-events: none; }
+.circuit .part { cursor: grab; }
+.circuit .part.burnt .lead, .circuit .part.burnt .body, .circuit .part.burnt .plate { stroke: #6b7280; }
+.circuit .burnt-x line { stroke: #ff6b6b; stroke-width: 5; stroke-linecap: round; }
+.circuit .sel-box { fill: rgba(77, 225, 255, 0.06); stroke: var(--glow); stroke-width: 2; stroke-dasharray: 8 6; pointer-events: none; }
+
+.circuit .wire { fill: none; stroke: #8fb4ff; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
+.circuit .wire.selected { stroke: var(--warn); }
+.circuit .wire-hit { fill: none; stroke: transparent; stroke-width: 28; cursor: pointer; }
+.circuit .wire.flow { stroke: #ffe28a; stroke-dasharray: 8 12; animation: flow 1s linear infinite; }
+.circuit .wire.flow.rev { animation-direction: reverse; }
+@keyframes flow { to { stroke-dashoffset: -40; } }
+@media (prefers-reduced-motion: reduce) { .circuit .wire.flow { animation: none; } }
+
+.circuit .ghost { stroke: var(--warn); stroke-width: 4; stroke-dasharray: 6 8; pointer-events: none; }
+.circuit .terminal { cursor: crosshair; }
+.circuit .t-dot { fill: var(--glow); stroke: #04101f; stroke-width: 2; }
+.circuit .terminal.pending .t-dot, .circuit .terminal.hover .t-dot { fill: var(--warn); r: 11; }
