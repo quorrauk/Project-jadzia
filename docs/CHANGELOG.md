@@ -4,7 +4,9 @@ Newest first.
 
 ## Unreleased
 
-- Steps 4-5 (on branch `step-3c-home-button`, not merged): lesson engine, generated questions, adaptive level, scenario missions, Formula Book, glossary, toys, and Arc 1 projects 1-5. Home screen: Missions, Open workshop and Formula Book at the top. 128 unit tests; lesson e2e needs updating.
+- Themes: NASA, Light, T2 and Quantum Leap, chosen from a drop-down on every screen, remembered per browser and per profile, animated (off for reduced motion). Colours moved into CSS variables.
+- Steps 4-5: lesson engine (nine stage types, Training/Standard/Stretch, four-rung help ladder, glossary, Formula Book, level variants), generated questions with new numbers every play, scenario missions, adaptive level with manual override, and all six Arc 1 projects (Ignition, Headlights, Dimmer, Switch Panel, Power Budget, Boss: Mission Day Failure). Home screen: Missions, Open workshop and Formula Book at the top.
+- Tests: 133 unit, 124 e2e (laptop + tablet).
 
 - Step 3b: Workshop sandbox. Grid board, six parts (battery, bulb, switch, resistor, dimmer, LED), touch-first placing and wiring, burn-out and repair, friendly status messages, readouts that change with the chosen level, help panel, starter circuit, per-profile saving. 100 unit and 74 e2e tests (laptop + tablet).
 

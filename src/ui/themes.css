@@ -1,0 +1,96 @@
+/* Themes. Each sets the colour variables from styles.css, then adds its own look.
+   Animation is only added inside prefers-reduced-motion: no-preference, so people who ask for less motion get none. */
+
+/* ---------------------------------------------------------------- NASA (default) */
+body[data-theme="nasa"] {
+  --bg: #02040c; --bg-top: #0b2a63; --panel: #0a1c44; --panel-edge: #1f3f86; --card: #07173a; --deep: #030a20;
+  --text: #f4f7ff; --muted: #9db3e6; --glow: #5eb0ff; --on-glow: #031126; --ok: #6dffb8; --warn: #ffc857;
+  --bad: #fc3d21; --bad-text: #ffb0a3; --wire: #9ec5ff; --flow: #ffe28a; --dot: #1b3a7a;
+  --halo: rgba(94, 176, 255, 0.10); --tint: rgba(94, 176, 255, 0.07); --glow-shadow: rgba(94, 176, 255, 0.55);
+  --font: "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+}
+body[data-theme="nasa"]::before {
+  content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.55;
+  background-image:
+    radial-gradient(1px 1px at 20px 30px, #fff, transparent),
+    radial-gradient(1px 1px at 120px 80px, #cfe3ff, transparent),
+    radial-gradient(1.5px 1.5px at 200px 160px, #fff, transparent),
+    radial-gradient(1px 1px at 300px 40px, #fff, transparent),
+    radial-gradient(1px 1px at 60px 190px, #cfe3ff, transparent);
+  background-size: 340px 220px;
+}
+body[data-theme="nasa"] h1 { letter-spacing: 0.02em; }
+body[data-theme="nasa"] .eyebrow { color: var(--bad); font-weight: 700; }
+@media (prefers-reduced-motion: no-preference) {
+  body[data-theme="nasa"]::before { animation: stars-drift 160s linear infinite, twinkle 6s ease-in-out infinite alternate; }
+  @keyframes stars-drift { to { background-position: -340px 220px; } }
+  @keyframes twinkle { from { opacity: 0.35; } to { opacity: 0.8; } }
+}
+
+/* ---------------------------------------------------------------- Light */
+body[data-theme="light"] {
+  --bg: #eef2f9; --bg-top: #ffffff; --panel: #ffffff; --panel-edge: #c3cde2; --card: #f4f7fc; --deep: #e8edf6;
+  --text: #14213d; --muted: #51618a; --glow: #0b5fd6; --on-glow: #ffffff; --ok: #0a7d3b; --warn: #8a5200;
+  --bad: #c62828; --bad-text: #a61b1b; --wire: #2f6fe0; --flow: #d97706; --dot: #b9c4dc;
+  --halo: rgba(11, 95, 214, 0.08); --tint: rgba(11, 95, 214, 0.06); --glow-shadow: rgba(11, 95, 214, 0.2);
+}
+body[data-theme="light"] h1 { text-shadow: none; }
+body[data-theme="light"] .toy-bulb[data-lit="true"] { box-shadow: 0 0 18px #f5b301; }
+
+/* ---------------------------------------------------------------- T2: red HUD, scanlines */
+body[data-theme="t2"] {
+  --bg: #050000; --bg-top: #2a0505; --panel: #140404; --panel-edge: #6b1111; --card: #0d0202; --deep: #050000;
+  --text: #ffd9d2; --muted: #d07a6a; --glow: #ff3b30; --on-glow: #140000; --ok: #ff9d3d; --warn: #ffd23d;
+  --bad: #ff0000; --bad-text: #ff8a80; --wire: #ff6f61; --flow: #ffd23d; --dot: #4a0d0d;
+  --halo: rgba(255, 59, 48, 0.14); --tint: rgba(255, 59, 48, 0.08); --glow-shadow: rgba(255, 59, 48, 0.7);
+  --font: ui-monospace, "SF Mono", Menlo, Consolas, "Courier New", monospace;
+}
+body[data-theme="t2"]::after {
+  content: ""; position: fixed; inset: 0; z-index: 100; pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.28) 0 1px, transparent 1px 3px);
+}
+body[data-theme="t2"]::before {
+  content: ""; position: fixed; left: 0; right: 0; top: -140px; height: 140px; z-index: 99; pointer-events: none;
+  background: linear-gradient(transparent, rgba(255, 59, 48, 0.12), transparent);
+}
+body[data-theme="t2"] .panel, body[data-theme="t2"] .ws-props, body[data-theme="t2"] .ws-readout,
+body[data-theme="t2"] .ws-palette, body[data-theme="t2"] .formula, body[data-theme="t2"] .question { border-radius: 2px; }
+body[data-theme="t2"] button { border-radius: 2px; text-transform: uppercase; letter-spacing: 0.06em; }
+body[data-theme="t2"] h1 { text-transform: uppercase; letter-spacing: 0.08em; }
+body[data-theme="t2"] .eyebrow::before { content: "> "; }
+@media (prefers-reduced-motion: no-preference) {
+  body[data-theme="t2"]::before { animation: hud-sweep 7s linear infinite; }
+  body[data-theme="t2"] h1 { animation: hud-flicker 5s steps(1) infinite; }
+  body[data-theme="t2"] .eyebrow::after { content: "_"; animation: blink 1s steps(1) infinite; }
+  @keyframes hud-sweep { to { transform: translateY(calc(100vh + 280px)); } }
+  @keyframes hud-flicker { 0%, 92%, 96%, 100% { opacity: 1; } 93% { opacity: 0.8; } 95% { opacity: 0.9; } }
+  @keyframes blink { 50% { opacity: 0; } }
+}
+
+/* ---------------------------------------------------------------- Quantum Leap: imaging chamber grid, Ziggy colour bar */
+body[data-theme="quantum-leap"] {
+  --bg: #06041a; --bg-top: #1d0f4a; --panel: #120a33; --panel-edge: #3b2a8f; --card: #0c0724; --deep: #050314;
+  --text: #eef1ff; --muted: #aeaae6; --glow: #7df9ff; --on-glow: #04061a; --ok: #8dffb0; --warn: #ffd86b;
+  --bad: #ff5fa8; --bad-text: #ffb3d6; --wire: #b69cff; --flow: #7df9ff; --dot: #2a1f66;
+  --halo: rgba(125, 249, 255, 0.12); --tint: rgba(182, 156, 255, 0.08); --glow-shadow: rgba(125, 249, 255, 0.55);
+  --font: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+}
+body[data-theme="quantum-leap"]::before {
+  content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: linear-gradient(rgba(125, 249, 255, 0.13) 1px, transparent 1px), linear-gradient(90deg, rgba(125, 249, 255, 0.13) 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: linear-gradient(transparent, #000 45%, transparent 95%);
+  mask-image: linear-gradient(transparent, #000 45%, transparent 95%);
+}
+body[data-theme="quantum-leap"]::after {
+  content: ""; position: fixed; left: 0; right: 0; top: 0; height: 5px; z-index: 100; pointer-events: none;
+  background: linear-gradient(90deg, #ff5fa8, #ffd86b, #8dffb0, #7df9ff, #b69cff, #ff5fa8);
+  background-size: 200% 100%;
+}
+body[data-theme="quantum-leap"] h1 { background: linear-gradient(90deg, #7df9ff, #b69cff, #ff5fa8); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: none; }
+@media (prefers-reduced-motion: no-preference) {
+  body[data-theme="quantum-leap"]::before { animation: grid-scroll 6s linear infinite; }
+  body[data-theme="quantum-leap"]::after { animation: ziggy-shift 5s linear infinite; }
+  @keyframes grid-scroll { to { background-position: 0 48px, 48px 0; } }
+  @keyframes ziggy-shift { to { background-position: 200% 0; } }
+}

@@ -3,6 +3,7 @@ import { LEVELS, levelInfo } from '../progress/levels.js';
 import { mountWorkshop } from '../sandbox/sandbox.js';
 import { mountLesson, renderBook, renderMissionList } from './lessons.js';
 import { recordFinish } from '../lessons/engine.js';
+import { loadDeviceTheme, saveDeviceTheme, applyTheme, createThemePicker, isTheme } from './theme.js';
 
 const app = document.getElementById('app');
 
@@ -47,6 +48,24 @@ function start(config, store, content) {
   let workshop = null;
   let lesson = null;
 
+  // Theme: the profile's own choice if it has one, else this browser's.
+  const picker = createThemePicker(document, {
+    current: loadDeviceTheme(window.localStorage),
+    onChange: (id) => {
+      applyTheme(document, id);
+      saveDeviceTheme(window.localStorage, id);
+      const active = store.getActive();
+      if (active && !active.guest) store.updateProfile(active.id, { theme: id });
+    },
+  });
+  document.getElementById('themebar').replaceChildren(picker.element);
+  function syncTheme() {
+    const active = store.getActive();
+    const id = active && isTheme(active.theme) ? active.theme : loadDeviceTheme(window.localStorage);
+    applyTheme(document, id);
+    picker.set(id);
+  }
+
   function render() {
     if (workshop) {
       workshop.unmount();
@@ -57,6 +76,7 @@ function start(config, store, content) {
       lesson = null;
     }
     document.body.classList.remove('wide');
+    syncTheme();
     const active = store.getActive();
     if (active) return renderHome(active);
     if (store.listProfiles().length === 0) return renderRecruitment(true);

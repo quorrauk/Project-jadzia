@@ -40,3 +40,8 @@ Newest first.
 - **Every mission must be provably winnable.** Each scenario and tier ships a solution board, and a unit test solves it with the real solver. The start board must not already meet the goal. This is what stops an unwinnable mission shipping.
 - **Never stuck in a question.** Wrong twice reveals "Show me the answer", which unlocks Next. A mission can be skipped, but earns no patch until its goal is met.
 - **Python stages are data until step 6.** Content already has task, starter code and expected output rules, so authoring is not blocked.
+
+- **Python stage rules (`expect`) for step 6.** Each Python stage lists rules the runner checks: `{kind: "code-contains", text}`, `{kind: "output-contains", text}`, `{kind: "any-output"}`. Wrong output never blocks: after two tries the learner can carry on.
+- **Themes are colour variables plus a few effects.** All colours come from CSS variables, so a new theme is one block in `themes.css`. A unit test fails if a theme misses a variable or an animation sits outside the reduced-motion query. T2 and Quantum Leap use the look (colours, scanlines, grid, colour bar) but no logos or artwork. Internal use only.
+- **Theme is kept per browser and per profile.** A candidate's own choice wins when they are active; guests use the browser's.
+- **Missions set the palette battery.** A scenario's battery voltage is what the palette places, so an empty-board mission still has the right numbers.

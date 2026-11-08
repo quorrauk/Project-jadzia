@@ -10,8 +10,8 @@ Status values: `planned`, `in-progress`, `done`.
 | 2 | DC solver with hand-calculated tests | done |
 | 3a | Profiles, guest mode, learner-chosen levels 1-5 | done |
 | 3b | Sandbox UI (level-aware readouts, "I don't get it" help, starter circuit) | done |
-| 4 | Lesson engine (tiers, help ladder, level variants), Formula Book, glossary, generated questions, adaptive level | built, not merged |
-| 5 | Arc 1 content (6 projects, levels 1-3) | 5 of 6 written, Boss to do |
+| 4 | Lesson engine (tiers, help ladder, level variants), Formula Book, glossary, generated questions, adaptive level | done |
+| 5 | Arc 1 content (6 projects, levels 1-3) | done (levels 1-3 written) |
 | 6 | Python sandbox and bridge | planned |
 | 7 | Progress map, export/import per profile, Certificate 1 | planned |
 | 8 | Arc 2-4 stubs, full docs | planned |
@@ -20,12 +20,12 @@ Status values: `planned`, `in-progress`, `done`.
 
 | # | Project | Electronics | Python | Maths | Status |
 |---|---------|-------------|--------|-------|--------|
-| 1 | Ignition | Complete circuit, battery, wire, bulb, switch; current direction | `print()`, running code | Units: volts, amps, ohms | written (not merged) |
-| 2 | Headlights | LED plus resistor; why LEDs burn out | First variables: `voltage = 9` | V = IR, substitution | written (not merged) |
-| 3 | Dimmer | Variable resistor; dim the cockpit/eyes | Variables with arithmetic; calculate a resistor value | Rearranging formulas | written (not merged) |
-| 4 | Switch Panel | Series vs parallel; backup lights | Text vs number variables; f-strings | Ratios, adding fractions | written (not merged) |
-| 5 | Power Budget | P = IV; energy; battery life | Script that totals the whole robot's power use | Units, standard form | written (not merged) |
-| 6 | Boss: Mission Day Failure | Diagnose with meters, fix the broken circuit | Short debug-the-script task | Mixed review | planned |
+| 1 | Ignition | Complete circuit, battery, wire, bulb, switch; current direction | `print()`, running code | Units: volts, amps, ohms | done |
+| 2 | Headlights | LED plus resistor; why LEDs burn out | First variables: `voltage = 9` | V = IR, substitution | done |
+| 3 | Dimmer | Variable resistor; dim the cockpit/eyes | Variables with arithmetic; calculate a resistor value | Rearranging formulas | done |
+| 4 | Switch Panel | Series vs parallel; backup lights | Text vs number variables; f-strings | Ratios, adding fractions | done |
+| 5 | Power Budget | P = IV; energy; battery life | Script that totals the whole robot's power use | Units, standard form | done |
+| 6 | Boss: Mission Day Failure | Diagnose with meters, fix the broken circuit | Short debug-the-script task | Mixed review | done |
 
 ## Arc 2: Sensors (stub)
 
