@@ -15,7 +15,7 @@ Steps 1, 2 and 3a done. Live site confirmed loading by the owner.
 
 - Workshop sandbox (`src/sandbox`): 24x14 grid board, tap-to-place or drag from the palette, tap-tap or drag wiring, rotate/delete/repair, switch toggle, dimmer slider, LED colours. Live status line, level-aware readouts (plain words at 1, V/I/R at 2, power and standard form at 3, Kirchhoff checks at 4, node-voltage table at 5). Always-visible "I don't get it" help, starter circuit, confirm-twice before replacing a board. Burnt parts go dead until repaired. Board saved per profile.
 
-## Next 3 steps
+## Next steps
 
 1. Step 4: lesson engine (9 stages from JSON, Training/Standard/Stretch tiers, four-rung help ladder, level variants), Formula Book, glossary.
 2. Step 5: Arc 1 content, project by project, levels 1-3.
