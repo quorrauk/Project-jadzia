@@ -8,11 +8,12 @@ Status values: `planned`, `in-progress`, `done`.
 |------|------|--------|
 | 1 | Walking skeleton (site, CI, Pages) | done |
 | 2 | DC solver with hand-calculated tests | done |
-| 3 | Sandbox UI | planned |
-| 4 | Lesson engine, Formula Book, glossary | planned |
-| 5 | Arc 1 content (6 projects) | planned |
+| 3a | Profiles, guest mode, learner-chosen levels 1-5 | done |
+| 3b | Sandbox UI (level-aware readouts, "I don't get it" help, starter circuit) | planned |
+| 4 | Lesson engine (tiers, help ladder, level variants), Formula Book, glossary | planned |
+| 5 | Arc 1 content (6 projects, levels 1-3) | planned |
 | 6 | Python sandbox and bridge | planned |
-| 7 | Progress map, export/import, Certificate 1 | planned |
+| 7 | Progress map, export/import per profile, Certificate 1 | planned |
 | 8 | Arc 2-4 stubs, full docs | planned |
 
 ## Arc 1: Launch Prep (build in Phase 1)
@@ -63,4 +64,6 @@ Maths progression across arcs: rearranging, graphs, standard form, simultaneous 
 
 ## Ideas (out of Phase 1 scope)
 
-- Capacitors, motors, AC, real hardware, A-level and uni extensions.
+- Capacitors, motors, AC, real hardware.
+- Lesson variants for levels 4 (A-level) and 5 (University). The levels are selectable now; their lessons are later-phase.
+- Teacher view (per-profile progress overview) if teachers want it.

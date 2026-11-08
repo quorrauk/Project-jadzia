@@ -20,4 +20,4 @@ Open http://localhost:8080/. (Pyodide, from step 6, needs a server; opening the 
 
 ## Docs
 
-See `STATE.md`, `ROADMAP.md`, `DECISIONS.md`, `DEPLOY.md`, `TESTING.md`, `CHANGELOG.md`.
+See `STATE.md`, `ROADMAP.md`, `DECISIONS.md`, `TEACHING-APPROACH.md`, `COMPONENTS.md`, `DEPLOY.md`, `TESTING.md`, `CHANGELOG.md`.
