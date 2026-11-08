@@ -1,0 +1,11 @@
+{
+  "terms": [
+    { "id": "circuit", "term": "circuit", "plain": { "1": "A loop that electricity can travel round. If the loop is broken, nothing moves.", "3": "A closed conducting path from the battery's + terminal, through components, back to its − terminal." } },
+    { "id": "voltage", "term": "voltage", "plain": { "1": "The push. How hard the battery shoves electricity round the loop. Measured in volts (V).", "2": "The electrical push between two points, in volts (V). A bigger voltage pushes more current through the same resistance.", "4": "Potential difference between two points: energy per unit charge, in volts (V)." } },
+    { "id": "current", "term": "current", "plain": { "1": "The flow. How much electricity is moving past a point each second. Measured in amps (A).", "2": "The flow of charge, in amps (A). 1000 milliamps (mA) make 1 amp.", "4": "Rate of flow of charge, I = ΔQ/Δt, in amps (A)." } },
+    { "id": "resistance", "term": "resistance", "plain": { "1": "The squeeze. How hard a part makes it for electricity to get through. Measured in ohms (Ω).", "2": "How much a part opposes the current, in ohms (Ω). More resistance means less current for the same voltage." } },
+    { "id": "battery", "term": "battery", "plain": { "1": "Your power supply. Its + side pushes electricity out and its − side takes it back in." } },
+    { "id": "switch", "term": "switch", "plain": { "1": "A gap you can open and close. Closed = the loop is complete and electricity flows. Open = the loop is broken." } },
+    { "id": "bulb", "term": "bulb", "plain": { "1": "A part that glows when electricity flows through it. Too much and it pops." } }
+  ]
+}

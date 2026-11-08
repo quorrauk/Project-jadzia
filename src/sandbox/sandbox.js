@@ -46,8 +46,9 @@ function loadBoard(raw) {
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 const snap = (v) => Math.round(v / GRID);
 
-function template() {
+function template(allowedParts, embedded) {
   const palette = Object.keys(PART_TYPES)
+    .filter((t) => !allowedParts || allowedParts.includes(t))
     .map((t) => `<button type="button" class="palette-item" data-type="${t}" data-testid="palette-${t}" aria-pressed="false">
         <span class="pv">${previewSvg(t)}</span><span>${PART_TYPES[t].label}</span></button>`)
     .join('');
@@ -55,8 +56,8 @@ function template() {
   return `
   <section class="workshop" data-testid="workshop">
     <header class="ws-top">
-      <button type="button" class="secondary" data-testid="ws-back">← Base</button>
-      <h1>Workshop</h1>
+      ${embedded ? '' : '<button type="button" class="secondary" data-testid="ws-back">← Base</button>'}
+      <h1>${embedded ? 'Build it here' : 'Workshop'}</h1>
       <label class="ws-level"><span class="sr-only">Level</span>
         <select data-testid="ws-level-select">${levels}</select></label>
       <button type="button" class="secondary" data-testid="btn-help">I don't get it</button>
@@ -94,7 +95,7 @@ function template() {
   </section>`;
 }
 
-export function mountWorkshop(container, { profile, onSave, onExit, onLevelChange }) {
+export function mountWorkshop(container, { profile, onSave, onExit, onLevelChange, embedded = false, allowedParts = null }) {
   let level = profile.level;
   let board = loadBoard(profile.workshop);
   const ui = {
@@ -112,7 +113,7 @@ export function mountWorkshop(container, { profile, onSave, onExit, onLevelChang
   let last = null;
   const timers = new Set();
 
-  container.innerHTML = template();
+  container.innerHTML = template(allowedParts, embedded);
   const $ = (id) => container.querySelector(`[data-testid="${id}"]`);
   const svg = $('board');
   const statusEl = $('status-text');
@@ -453,7 +454,7 @@ export function mountWorkshop(container, { profile, onSave, onExit, onLevelChang
   }));
   $('btn-starter').addEventListener('click', () => askThen('starter', loadStarter));
   $('btn-clear').addEventListener('click', () => askThen('clear', clearAll));
-  $('ws-back').addEventListener('click', () => onExit());
+  if (!embedded) $('ws-back').addEventListener('click', () => onExit());
   levelSelect.addEventListener('change', () => {
     level = Number(levelSelect.value);
     onLevelChange(level);

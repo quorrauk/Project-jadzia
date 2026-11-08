@@ -10,7 +10,7 @@ export const MAX_PROFILES = 12;
 export const MAX_NAME_LENGTH = 30;
 
 const ID_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no I, O, 0, 1
-const UPDATABLE = ['name', 'robotName', 'level', 'completed', 'workshop'];
+const UPDATABLE = ['name', 'robotName', 'level', 'completed', 'workshop', 'formulas'];
 
 export function programmeInitials(programmeName) {
   const letters = String(programmeName || '')
@@ -186,6 +186,10 @@ export function createStore(storage, programmeName, random = Math.random) {
           target.completed = patch.completed;
         }
         if ('workshop' in patch) target.workshop = patch.workshop;
+        if ('formulas' in patch) {
+          if (!Array.isArray(patch.formulas)) throw new Error('formulas must be a list');
+          target.formulas = patch.formulas;
+        }
         return target;
       };
       if (id === 'guest' && guest) return apply(guest);

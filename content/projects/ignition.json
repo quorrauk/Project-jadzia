@@ -1,0 +1,140 @@
+{
+  "id": "ignition",
+  "title": "Ignition",
+  "arc": 1,
+  "stages": [
+    {
+      "type": "briefing",
+      "lines": [
+        "Mission Control here. The launch pad lights are out and the lunar mice are throwing a party in the dark.",
+        "Your job: get one bulb glowing. We will play first and talk after."
+      ]
+    },
+    {
+      "type": "learn",
+      "toy": "bulb-switch",
+      "toyPrompt": "Tap the switch. Watch the bulb.",
+      "chunks": {
+        "1": [
+          "You just closed a gap. That let electricity run round a loop, and the bulb lit up.",
+          "A loop like that is called a [[circuit]]. Break the loop and everything stops.",
+          "The [[battery]] gives the push. The [[switch]] opens and closes the gap. The [[bulb]] shows you it is working."
+        ],
+        "2": [
+          "Closing the switch completed the [[circuit]], so current could flow through the [[bulb]].",
+          "The [[battery]] supplies the [[voltage]] (the push). The flow is the [[current]]. The bulb's [[resistance]] decides how much flows."
+        ],
+        "3": [
+          "A [[circuit]] must be a complete conducting loop. The [[switch]] controls whether it is closed.",
+          "Conventional current leaves the + terminal of the [[battery]], passes through the [[bulb]] and returns to −. [[voltage]], [[current]] and [[resistance]] are linked by one equation, coming next."
+        ]
+      },
+      "help": {
+        "1": "Think of a bike chain. If the chain is joined into a loop, the wheel turns. If there is a gap, nothing moves. A circuit is the chain.",
+        "2": "Picture a toy train track. The train only runs if the track is a full loop. Electricity is the train.",
+        "3": "Try it yourself: tap the switch on, then off, and say out loud what changed. Closed switch, full loop, bulb on.",
+        "4": "Watch: switch off, loop has a gap, bulb dark. Switch on, loop is complete, bulb glows. Now you do the opposite: make it dark again."
+      }
+    },
+    {
+      "type": "equation",
+      "formula": "ohms-law",
+      "intro": {
+        "1": "Here is a rule that links push, flow and squeeze. It goes in your Formula Book, so you never have to remember it.",
+        "2": "Ohm's law links [[voltage]], [[current]] and [[resistance]]. It goes in your Formula Book.",
+        "3": "Ohm's law, V = IR. Rearrange it for whichever quantity you need. It goes in your Formula Book."
+      }
+    },
+    {
+      "type": "example",
+      "title": "Worked example",
+      "steps": {
+        "1": [
+          "A 6 V battery pushes electricity through a part that squeezes with 2 Ω.",
+          "We want the flow. The rule: I = V ÷ R.",
+          "Put the numbers in: I = 6 ÷ 2.",
+          "That makes 3 A. Three amps flow."
+        ],
+        "3": [
+          "Given V = 6 V and R = 2 Ω, find I.",
+          "Rearrange V = IR to I = V ÷ R.",
+          "Substitute: I = 6 ÷ 2.",
+          "I = 3 A."
+        ]
+      }
+    },
+    {
+      "type": "try",
+      "title": "Try one",
+      "questions": [
+        {
+          "prompt": "A 9 V battery pushes electricity through a 3 Ω part. How many amps flow?",
+          "unit": "A",
+          "answer": 3,
+          "explain": "I = V ÷ R = 9 ÷ 3 = 3 A.",
+          "wrong": [{ "value": 27, "why": "That is 9 × 3. We want to divide: flow = push ÷ squeeze, so 9 ÷ 3." }],
+          "hints": ["Which rule gives flow? Look in your Formula Book.", "I = V ÷ R. What are V and R here?", "V is 9 and R is 3. So I = 9 ÷ 3."]
+        }
+      ],
+      "help": {
+        "1": "Flow is push divided by squeeze. Push is 9. Squeeze is 3.",
+        "2": "Share 9 sweets between 3 friends. Each gets the same number. That number is the answer.",
+        "3": "Same idea, different numbers: 8 V and 2 Ω gives 8 ÷ 2 = 4 A. Now do 9 ÷ 3.",
+        "4": "Watch: I = V ÷ R, so I = 9 ÷ 3 = 3 A. Now try 6 V through 3 Ω."
+      }
+    },
+    {
+      "type": "mission",
+      "title": "Light the launch pad",
+      "story": "The pad lights are dead. Build a circuit that makes the bulb glow.",
+      "parts": ["battery", "bulb", "switch"],
+      "goal": { "type": "lit", "part": "bulb", "min": 1 },
+      "tiers": {
+        "training": { "text": "Training: the parts are already on the board. Close the switch to finish the loop.", "start": "starter" },
+        "standard": { "text": "Build it from nothing: a battery, a switch and a bulb in one full loop, and get the bulb glowing.", "start": "empty" },
+        "stretch": { "text": "Stretch: now light two bulbs at once. Same battery.", "start": "empty", "goal": { "type": "lit", "part": "bulb", "min": 2 } }
+      },
+      "hints": [
+        "Electricity needs a full circle. Is there a gap?",
+        "Tap the + dot on the battery, then a dot on the switch. Keep joining parts until you are back at the battery's − dot.",
+        "Battery + to the switch, switch to the bulb, bulb back to the battery −. Then close the switch."
+      ],
+      "help": {
+        "1": "A circuit is a loop. Join the parts in a ring, battery to switch to bulb and back to the battery.",
+        "2": "Make a ring like a necklace. Every part is a bead and the wires are the string.",
+        "3": "Example: battery + → switch → bulb → battery −. Then tap the switch to close it.",
+        "4": "Tap 'Load a starter circuit' and I will have it built for you. Close the switch, then clear the board and build your own."
+      }
+    },
+    {
+      "type": "debrief",
+      "lines": [
+        "The bulb lit because you made a full loop: battery, switch, bulb, and back.",
+        "Open the switch and the loop breaks. No loop, no flow, no light.",
+        "Next time: why an LED needs a resistor so it does not retire early."
+      ]
+    },
+    {
+      "type": "maths",
+      "title": "Maths check",
+      "questions": [
+        {
+          "prompt": "Your bulb has 20 Ω of squeeze and the battery pushes 4.5 V. How many amps flow? Give your answer to 3 decimal places, for example 0.123.",
+          "unit": "A",
+          "answer": 0.225,
+          "tolerance": 0.03,
+          "explain": "I = V ÷ R = 4.5 ÷ 20 = 0.225 A (225 mA).",
+          "hints": ["Use I = V ÷ R.", "V = 4.5 and R = 20.", "4.5 ÷ 20 = 0.225."]
+        },
+        {
+          "prompt": "A circuit has a 12 V push and 0.5 A flows. What is the resistance in ohms?",
+          "unit": "Ω",
+          "answer": 24,
+          "explain": "R = V ÷ I = 12 ÷ 0.5 = 24 Ω.",
+          "wrong": [{ "value": 6, "why": "That is 12 × 0.5. To find the squeeze we divide: R = V ÷ I." }],
+          "hints": ["Rearrange V = I × R to get R.", "R = V ÷ I.", "12 ÷ 0.5 = 24."]
+        }
+      ]
+    }
+  ]
+}

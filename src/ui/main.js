@@ -1,6 +1,8 @@
 import { createStore, MAX_PROFILES } from '../progress/store.js';
 import { LEVELS, levelInfo } from '../progress/levels.js';
 import { mountWorkshop } from '../sandbox/sandbox.js';
+import { mountLesson, renderBook, renderMissionList } from './lessons.js';
+import { recordFinish } from '../lessons/engine.js';
 
 const app = document.getElementById('app');
 
@@ -35,13 +37,24 @@ function levelPill(level) {
   return el('span', { class: 'pill', 'data-testid': 'level-pill' }, `Level ${info.id} · ${info.name}`);
 }
 
-function start(config, store) {
+async function loadJson(path) {
+  const res = await fetch(path, { cache: 'no-cache' });
+  if (!res.ok) throw new Error(`Could not load ${path} (${res.status})`);
+  return res.json();
+}
+
+function start(config, store, content) {
   let workshop = null;
+  let lesson = null;
 
   function render() {
     if (workshop) {
       workshop.unmount();
       workshop = null;
+    }
+    if (lesson) {
+      lesson.unmount();
+      lesson = null;
     }
     document.body.classList.remove('wide');
     const active = store.getActive();
@@ -61,6 +74,49 @@ function start(config, store) {
       onLevelChange: (level) => store.updateProfile(profile.id, { level }),
       onExit: () => render(),
     });
+  }
+
+  function renderMissions() {
+    const profile = store.getActive();
+    renderMissionList(app, {
+      lessons: content.lessons,
+      completed: profile.completed ?? [],
+      onPick: (entry) => playLesson(entry),
+      onBack: () => render(),
+    });
+  }
+
+  async function playLesson(entry) {
+    try {
+      const def = await loadJson(`content/${entry.file}`);
+      const profile = store.getActive();
+      document.body.classList.add('wide');
+      const holder = el('div');
+      app.replaceChildren(holder);
+      lesson = mountLesson(holder, {
+        def,
+        profile,
+        glossary: content.glossary,
+        formulas: content.formulas,
+        onExit: () => render(),
+        onFormula: (id) => {
+          const p = store.getActive();
+          if (!(p.formulas ?? []).includes(id)) store.updateProfile(p.id, { formulas: [...(p.formulas ?? []), id] });
+        },
+        onFinish: (id, tier) => {
+          const p = store.getActive();
+          store.updateProfile(p.id, { completed: recordFinish(p.completed ?? [], id, tier) });
+        },
+        onLevelChange: (level) => store.updateProfile(profile.id, { level }),
+      });
+    } catch (err) {
+      app.replaceChildren(el('p', { class: 'error', 'data-testid': 'fatal' }, `Could not open mission: ${err.message}`));
+    }
+  }
+
+  function renderBookScreen() {
+    const p = store.getActive();
+    renderBook(app, { formulas: content.formulas, glossary: content.glossary, unlocked: p.formulas ?? [], level: p.level, onBack: () => render() });
   }
 
   // ------------------------------------------------------------ who's flying
@@ -165,8 +221,12 @@ function start(config, store) {
     );
 
     const top = el('div', { class: 'row' });
-    top.append(button('Open workshop', 'open-workshop', () => renderWorkshop(store.getActive())));
-    top.firstChild.style.marginTop = '0';
+    top.append(
+      button('Missions', 'open-missions', () => renderMissions()),
+      button('Open workshop', 'open-workshop', () => renderWorkshop(store.getActive())),
+      button('Formula Book', 'open-book', () => renderBookScreen(), 'secondary'),
+    );
+    for (const b of top.children) b.style.marginTop = '0';
     panel.append(top);
 
     const badge = el('div', { class: 'badge', 'data-testid': 'badge' });
@@ -243,7 +303,8 @@ async function main() {
   try {
     const config = await loadConfig();
     document.title = config.programmeName;
-    start(config, createStore(window.localStorage, config.programmeName));
+    const [glossary, formulas, index] = await Promise.all([loadJson('content/glossary.json'), loadJson('content/formulas.json'), loadJson('content/lessons.json')]);
+    start(config, createStore(window.localStorage, config.programmeName), { glossary: glossary.terms, formulas: formulas.formulas, lessons: index.lessons });
   } catch (err) {
     app.replaceChildren(el('p', { class: 'error', 'data-testid': 'fatal' }, `Launch failed: ${err.message}`));
   }

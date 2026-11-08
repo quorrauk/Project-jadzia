@@ -349,3 +349,35 @@ body.wide #app { max-width: 1280px; }
 .circuit .terminal { cursor: crosshair; }
 .circuit .t-dot { fill: var(--glow); stroke: #04101f; stroke-width: 2; }
 .circuit .terminal.pending .t-dot, .circuit .terminal.hover .t-dot { fill: var(--warn); r: 11; }
+
+/* ---- lessons ---- */
+
+.lesson { display: grid; gap: 12px; max-width: 860px; margin: 0 auto; }
+.lesson .ws-top h1 { font-size: 1.3rem; }
+.lesson-body { display: grid; gap: 12px; }
+.term {
+  display: inline; min-height: 0; min-width: 0; margin: 0; padding: 0 2px;
+  font: inherit; font-weight: 700; color: var(--glow); background: transparent;
+  border: 0; border-bottom: 2px dotted var(--glow); border-radius: 0;
+}
+.term-def { padding: 10px 14px; background: var(--panel); border: 1px solid var(--glow); border-radius: 10px; }
+.toy { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 14px; background: #0a1128; border: 1px dashed var(--glow); border-radius: 12px; }
+.toy p { flex-basis: 100%; margin: 0; }
+.toy button { min-height: 56px; }
+.toy-bulb { padding: 14px 20px; font-weight: 700; border: 2px solid var(--panel-edge); border-radius: 999px; }
+.toy-bulb[data-lit="true"] { color: #1a1300; background: #ffd24d; border-color: #ffd24d; box-shadow: 0 0 24px #ffd24d; }
+.formula { padding: 14px 18px; background: var(--panel); border: 1px solid var(--glow); border-radius: 12px; }
+.formula h2 { margin: 0 0 6px; font-size: 1.1rem; }
+.equation { margin: 6px 0; font-size: 2rem; font-weight: 700; color: var(--glow); }
+.symbols { margin: 6px 0; padding-left: 20px; }
+.steps { margin: 0; padding-left: 22px; }
+.steps li { margin: 6px 0; font-size: 1.1rem; }
+.question { padding: 12px 14px; background: var(--panel); border: 1px solid var(--panel-edge); border-radius: 12px; }
+.question[data-done="true"] { border-color: var(--ok); }
+.question .row button { margin-top: 0; }
+.question input { margin-top: 8px; max-width: 240px; }
+.feedback[data-state="right"] { color: var(--ok); }
+.feedback[data-state="wrong"] { color: var(--warn); }
+.lesson button:disabled { opacity: 0.45; cursor: not-allowed; }
+.glossary dt { margin-top: 10px; font-weight: 700; color: var(--glow); }
+.glossary dd { margin: 2px 0 0; }
