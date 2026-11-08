@@ -4,7 +4,7 @@ Read this first every session.
 
 ## Status
 
-Phase 1 steps 1-5 done and on `main`: skeleton, solver, profiles and levels, workshop, lesson engine, all six Arc 1 projects, and a theme drop-down. Remaining in Phase 1: step 6 (Python sandbox), step 7 (progress map, export/import, Certificate 1), step 8 (Arc 2-4 stubs and remaining docs). Owner play-test of Arc 1 not done yet.
+Phase 1 steps 1-6 done: skeleton, solver, profiles and levels, workshop, lesson engine, all six Arc 1 projects, theme drop-down, Python sandbox and the incremental Mission Control panel. Remaining in Phase 1: step 7 (progress map, export/import, Certificate 1), step 8 (Arc 2-4 stubs and remaining docs). Owner play-test of Arc 1 not done yet.
 
 ## Built
 
@@ -17,13 +17,13 @@ Phase 1 steps 1-5 done and on `main`: skeleton, solver, profiles and levels, wor
 
 - Lesson engine (`src/lessons`, `src/ui/lessons.js`, `src/ui/toys.js`): stages from JSON, Training/Standard/Stretch tiers, four-rung "I don't get it" ladder, glossary words you can tap, Formula Book, level variants with honest fallback. Generated questions (`generate.js`: seeded numbers, per-level ranges, safe expression parser) so every replay has new numbers; scenario missions so a replay is a new challenge. Adaptive level (`adaptive.js`): 3 clean answers in a row moves up, 2 struggles moves down, in auto mode (on by default, undo offered) or as a suggestion with auto off. A manual level choice always wins. Home screen now has Missions, Open workshop and Formula Book buttons at the top.
 - Themes (`src/ui/theme.js`, `themes.css`): NASA (default, drifting stars), Light, T2 (red HUD, scanlines, sweep), Quantum Leap (imaging-chamber grid, colour bar). Drop-down on every screen, kept per browser and per profile. Animations only run when the device allows motion. Contrast is tested for every theme.
-- Arc 1 content (`content/projects`): Ignition, Headlights, Dimmer, Switch Panel, Power Budget, Boss: Mission Day Failure. Each has a toy, an equation card, a worked example, a generated "Try one", a scenario mission with three tiers, a debrief, a Python stage and a generated maths check. Python stages are data only: the player shows the starter code and "the Python lab switches on in the next update" (step 6).
+- Arc 1 content (`content/projects`): Ignition, Headlights, Dimmer, Switch Panel, Power Budget, Boss: Mission Day Failure. Each has a toy, an equation card, a worked example, a generated "Try one", a scenario mission with three tiers, a debrief, a Python stage and a generated maths check. Python stages run in the Python lab (`src/ui/pythonlab.js`, `src/python/*`). The panel model and view are in `src/dashboard/panel.js`.
 - Content QA (`validateLesson`): every question is generated at all 5 levels with 40 seeds and must fill in, give a positive number and have hints; every mission scenario x tier must ship a solution board that meets its goal, and the start board must not already meet it.
 
 ## Next steps
 
 1. Owner play-test of Arc 1 on the tablet: is it fun, is it clear for a 13-year-old, is any project too hard or too easy.
-2. Step 6: Python sandbox (Pyodide, pin the version in `config/app.config.json`) and the circuit bridge. The Python stages already exist as data and show "coming soon". Rules for `expect` are in DECISIONS.
+2. Not verified from the build sandbox: the real CDN load of Pyodide (tests serve the npm copy). Open a Python stage on the live site once and check it runs. Python `circuit.current(...)` readings from the workshop board are not wired yet (the helper exists, returns "no part"); the panel is the Python target for now.
 3. Step 7: progress map, per-profile export/import, Certificate 1.
 4. Step 8: Arc 2-4 stubs and the remaining docs (CONTENT-SPEC, PROJECT-TEMPLATE, MENTOR-VOICE, PARENT-GUIDE).
 5. Arc 1 text for levels 4-5.

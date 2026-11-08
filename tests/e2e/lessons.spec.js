@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { servePyodide } from './pyodide-route.js';
 
 async function enlist(page, { level, search = '' } = {}) {
   await page.goto(`/index.html${search}`);
@@ -60,6 +61,8 @@ async function answerIgnitionMaths(page) {
   }
 }
 
+test.beforeEach(async ({ context }) => { await servePyodide(context); });
+
 test.describe('lessons', () => {
   test('home shows Missions, Workshop and Formula Book without scrolling', async ({ page }) => {
     await enlist(page);
@@ -118,8 +121,9 @@ test.describe('lessons', () => {
     await expect(page.getByTestId('mission-status')).toContainText('Mission complete');
     await expect(next(page)).toHaveText('Next');
     await toStage(page, 8);
-    await expect(page.getByTestId('python-starter')).toContainText('print(');
-    await expect(page.getByTestId('python-soon')).toBeVisible();
+    await expect(page.getByTestId('py-editor')).toHaveValue(/print\(/);
+    await expect(page.getByTestId('dash-power')).toBeHidden();
+    await expect(page.getByTestId('dash-empty')).toBeVisible();
     await toStage(page, 9);
 
     await answerIgnitionMaths(page);

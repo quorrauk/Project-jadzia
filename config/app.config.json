@@ -9,7 +9,7 @@
     "branch": "main",
     "pagesUrl": "https://quorrauk.github.io/Project-jadzia/"
   },
-  "pyodide": { "version": "PIN-A-VERSION", "selfHost": false },
+  "pyodide": { "version": "0.26.4", "selfHost": false },
   "features": { "pythonSandbox": true, "certificates": true, "offlineCache": true },
   "contentVersion": 1
 }

@@ -9,6 +9,8 @@ import { createTracker, outcomeFor } from '../lessons/adaptive.js';
 import { boardFromSpec } from '../lessons/boards.js';
 import { makeToy } from './toys.js';
 import { mountWorkshop } from '../sandbox/sandbox.js';
+import { drawPythonLab } from './pythonlab.js';
+import { partForLesson } from '../dashboard/panel.js';
 
 function el(tag, attrs = {}, text) {
   const node = document.createElement(tag);
@@ -53,7 +55,7 @@ export function definitionFor(entry, level) {
 
 // ------------------------------------------------------------------ the player
 
-export function mountLesson(container, { def, profile, glossary, formulas, onExit, onFormula, onFinish, onLevelChange, onAdaptiveChange, seed }) {
+export function mountLesson(container, { def, profile, glossary, formulas, onExit, onFormula, onFinish, onLevelChange, onAdaptiveChange, seed, runner = null, completed = [] }) {
   let level = profile.level;
   let auto = profile.adaptive !== false;
   const tracker = createTracker(level);
@@ -290,9 +292,12 @@ export function mountLesson(container, { def, profile, glossary, formulas, onExi
   }
 
   function drawPython(stage, body) {
-    body.append(mentor(stage.task));
-    body.append(el('pre', { class: 'code', 'data-testid': 'python-starter' }, stage.starter));
-    body.append(el('p', { class: 'muted', 'data-testid': 'python-soon' }, 'The Python lab switches on in the next update. For now, read the code and say what you think it will print. You can carry on.'));
+    if (!runner) {
+      body.append(mentor(stage.task), el('pre', { class: 'code', 'data-testid': 'python-starter' }, stage.starter));
+      body.append(el('p', { class: 'muted', 'data-testid': 'python-soon' }, 'The Python lab is not available here. Read the code and say what you think it will print. You can carry on.'));
+      return;
+    }
+    drawPythonLab(body, { stage, runner, completed, mentorLine: mentor, onRan: () => {} });
   }
 
   function drawMission(stageIn, body) {
@@ -455,6 +460,8 @@ export function mountLesson(container, { def, profile, glossary, formulas, onExi
     done.append(el('p', { class: 'eyebrow' }, def.title));
     if (missionDone) {
       done.append(el('h1', {}, 'Mission complete.'), mentor(`Patch earned: ${def.title}. ${finishedTier === 'stretch' ? 'And a bonus star for the Stretch.' : 'Come back for the Stretch star any time.'} Replay it for new numbers and a new challenge.`));
+      const part = partForLesson(def.id);
+      if (part) done.append(el('p', { class: 'dash-installed', 'data-testid': 'part-installed' }, `New part built for your Mission Control panel: ${part.name}. ${part.blurb}`));
     } else {
       done.append(el('h1', {}, 'Nearly there.'), mentor('The mission is not finished yet. Come back whenever you like. Your progress is not lost.'));
     }

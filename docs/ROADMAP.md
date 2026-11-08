@@ -12,7 +12,7 @@ Status values: `planned`, `in-progress`, `done`.
 | 3b | Sandbox UI (level-aware readouts, "I don't get it" help, starter circuit) | done |
 | 4 | Lesson engine (tiers, help ladder, level variants), Formula Book, glossary, generated questions, adaptive level | done |
 | 5 | Arc 1 content (6 projects, levels 1-3) | done (levels 1-3 written) |
-| 6 | Python sandbox and bridge | planned |
+| 6 | Python sandbox and Mission Control panel | done (workshop `circuit` readings still to wire) |
 | 7 | Progress map, export/import per profile, Certificate 1 | planned |
 | 8 | Arc 2-4 stubs, full docs | planned |
 

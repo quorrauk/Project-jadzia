@@ -1,6 +1,8 @@
 import { createStore, MAX_PROFILES } from '../progress/store.js';
 import { LEVELS, levelInfo } from '../progress/levels.js';
 import { mountWorkshop } from '../sandbox/sandbox.js';
+import { createRunner } from '../python/runner.js';
+import { installedParts, createPanelState, mountPanel } from '../dashboard/panel.js';
 import { mountLesson, renderBook, renderMissionList } from './lessons.js';
 import { recordFinish } from '../lessons/engine.js';
 import { loadDeviceTheme, saveDeviceTheme, applyTheme, createThemePicker, isTheme } from './theme.js';
@@ -96,6 +98,17 @@ function start(config, store, content) {
     });
   }
 
+  let runner = null;
+  function getRunner() {
+    if (!config.features?.pythonSandbox) return null;
+    if (!runner) {
+      const v = config.pyodide.version;
+      const baseUrl = new URLSearchParams(window.location.search).get('pyodide') || (config.pyodide.selfHost ? new URL('vendor/pyodide/', document.baseURI).href : `https://cdn.jsdelivr.net/pyodide/v${v}/full/`);
+      runner = createRunner({ baseUrl, workerUrl: new URL('../python/worker.js', import.meta.url) });
+    }
+    return runner;
+  }
+
   function renderMissions() {
     const profile = store.getActive();
     renderMissionList(app, {
@@ -119,6 +132,8 @@ function start(config, store, content) {
         glossary: content.glossary,
         formulas: content.formulas,
         onExit: () => render(),
+        runner: getRunner(),
+        completed: profile.completed ?? [],
         onFormula: (id) => {
           const p = store.getActive();
           if (!(p.formulas ?? []).includes(id)) store.updateProfile(p.id, { formulas: [...(p.formulas ?? []), id] });
@@ -250,6 +265,10 @@ function start(config, store, content) {
     );
     for (const b of top.children) b.style.marginTop = '0';
     panel.append(top);
+
+    const dashHolder = el('div');
+    panel.append(dashHolder);
+    mountPanel(dashHolder, { installed: installedParts(profile.completed ?? []), state: createPanelState() });
 
     const badge = el('div', { class: 'badge', 'data-testid': 'badge' });
     badge.append(

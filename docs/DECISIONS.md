@@ -45,3 +45,10 @@ Newest first.
 - **Themes are colour variables plus a few effects.** All colours come from CSS variables, so a new theme is one block in `themes.css`. A unit test fails if a theme misses a variable or an animation sits outside the reduced-motion query. T2 and Quantum Leap use the look (colours, scanlines, grid, colour bar) but no logos or artwork. Internal use only.
 - **Theme is kept per browser and per profile.** A candidate's own choice wins when they are active; guests use the browser's.
 - **Missions set the palette battery.** A scenario's battery voltage is what the palette places, so an empty-board mission still has the right numbers.
+
+## Python sandbox and the panel (step 6)
+
+- Pyodide 0.26.4 pinned in `config/app.config.json`, loaded from jsDelivr on first use, in a module Web Worker. Chosen so a runaway loop is stopped by terminating the worker (5 s limit). `?pyodide=<url>` overrides the base URL (used for testing and self-hosting later).
+- Python never touches the page. Her code gets `panel` and `circuit` objects that record actions; the page applies them. Each run starts with fresh globals.
+- Checks (`expect`): `code-contains`, `output-contains`, `any-output`, `panel`. A failed check never blocks Next.
+- Dashboard: on-screen first (KISS, cheap). Empty until built; one part per finished project, derived from `profile.completed`, so nothing extra to store. Physical hardware version stays deferred (iPad Safari has no Web Serial or Bluetooth).

@@ -415,3 +415,28 @@ pre.code { margin: 0; padding: 12px; overflow: auto; background: var(--deep); bo
   background: var(--deep); border: 1px solid var(--panel-edge); border-radius: 8px;
 }
 #app { position: relative; z-index: 1; }
+
+/* ---- Mission Control panel and Python lab */
+.dash { margin-top: 16px; padding: 12px; border: 1px solid var(--panel-edge); border-radius: 10px; background: var(--card); }
+.dash-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.dash-head h2 { margin: 0; font-size: 1.1rem; }
+.dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin-top: 10px; }
+.dash-part { padding: 10px; border: 1px solid var(--panel-edge); border-radius: 8px; background: var(--deep); display: flex; flex-direction: column; gap: 8px; }
+.dash-part h3 { margin: 0; font-size: 0.95rem; color: var(--muted); }
+.dash-part[data-fresh="true"] { border-color: var(--glow); }
+.dash-switch { min-height: 44px; margin: 0; }
+.dash-switch[aria-pressed="true"] { background: var(--ok); color: var(--on-glow); }
+.dash-lamp { display: flex; align-items: center; gap: 8px; }
+.dash-lamp .bulb { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--muted); background: var(--deep); }
+.dash-lamp[data-lit="true"] .bulb { background: var(--flow); border-color: var(--flow); box-shadow: 0 0 calc(4px + 12px * var(--b, 1)) var(--flow); opacity: calc(0.35 + 0.65 * var(--b, 1)); }
+.dash input[type="range"] { width: 100%; min-height: 44px; }
+.dash-read { margin: 0; font-weight: 600; }
+.dash-read[data-go="true"] { color: var(--ok); }
+.dash-next, .dash-installed { margin: 10px 0 0; }
+.dash-installed { padding: 10px; border: 1px solid var(--glow); border-radius: 8px; }
+.py-lab { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 16px; align-items: start; }
+@media (max-width: 800px) { .py-lab { grid-template-columns: 1fr; } }
+.py-left { display: flex; flex-direction: column; gap: 10px; }
+.code-editor { width: 100%; box-sizing: border-box; font: 1rem/1.4 ui-monospace, Menlo, Consolas, monospace; padding: 12px; background: var(--deep); color: var(--text); border: 1px solid var(--panel-edge); border-radius: 8px; resize: vertical; tab-size: 4; }
+.py-output { min-height: 3em; white-space: pre-wrap; }
+@media (prefers-reduced-motion: no-preference) { .dash-part[data-fresh="true"] { animation: dashpulse 1.4s ease-in-out 2; } @keyframes dashpulse { 50% { box-shadow: 0 0 14px var(--glow-shadow); } } }

@@ -13,7 +13,7 @@ Lessons: `lessons.test.js` and `generate.test.js` cover the engine, the expressi
 
 Themes: `theme.test.js` checks every theme defines every colour and that animation only appears under the reduced-motion query. `themes.spec.js` checks contrast (WCAG 4.5:1 for text, status and button text) in every theme, persistence per browser and per profile, and reduced motion.
 
-Totals: 133 unit, 124 e2e (62 per viewport).
+Totals: 155 unit, 142 e2e (71 per viewport). Python tests run real Pyodide from npm (`pyodide@0.26.4`); e2e serves the CDN URL from node_modules via `tests/e2e/pyodide-route.js`, so no internet is needed.
 
 ## End to end (Playwright)
 
