@@ -326,6 +326,11 @@
           },
           {
             "type": "bulb",
+            "x": 11,
+            "y": 2
+          },
+          {
+            "type": "bulb",
             "x": 21,
             "y": 2,
             "rot": 1
@@ -342,6 +347,10 @@
           ],
           [
             "BULB1.b",
+            "BULB2.a"
+          ],
+          [
+            "BULB2.b",
             "B1.b"
           ]
         ]
@@ -387,6 +396,11 @@
               },
               {
                 "type": "bulb",
+                "x": 11,
+                "y": 2
+              },
+              {
+                "type": "bulb",
                 "x": 21,
                 "y": 2,
                 "rot": 1
@@ -403,6 +417,10 @@
               ],
               [
                 "BULB1.b",
+                "BULB2.a"
+              ],
+              [
+                "BULB2.b",
                 "B1.b"
               ]
             ]
@@ -504,6 +522,11 @@
                   },
                   {
                     "type": "bulb",
+                    "x": 16,
+                    "y": 2
+                  },
+                  {
+                    "type": "bulb",
                     "x": 21,
                     "y": 2,
                     "rot": 1
@@ -524,6 +547,10 @@
                   ],
                   [
                     "BULB2.b",
+                    "BULB3.a"
+                  ],
+                  [
+                    "BULB3.b",
                     "B1.b"
                   ]
                 ]
@@ -571,6 +598,11 @@
               },
               {
                 "type": "bulb",
+                "x": 11,
+                "y": 2
+              },
+              {
+                "type": "bulb",
                 "x": 21,
                 "y": 2,
                 "rot": 1
@@ -587,6 +619,10 @@
               ],
               [
                 "BULB1.b",
+                "BULB2.a"
+              ],
+              [
+                "BULB2.b",
                 "B1.b"
               ]
             ]
@@ -688,6 +724,11 @@
                   },
                   {
                     "type": "bulb",
+                    "x": 16,
+                    "y": 2
+                  },
+                  {
+                    "type": "bulb",
                     "x": 21,
                     "y": 2,
                     "rot": 1
@@ -708,6 +749,10 @@
                   ],
                   [
                     "BULB2.b",
+                    "BULB3.a"
+                  ],
+                  [
+                    "BULB3.b",
                     "B1.b"
                   ]
                 ]
@@ -755,6 +800,11 @@
               },
               {
                 "type": "bulb",
+                "x": 11,
+                "y": 2
+              },
+              {
+                "type": "bulb",
                 "x": 21,
                 "y": 2,
                 "rot": 1
@@ -771,6 +821,10 @@
               ],
               [
                 "BULB1.b",
+                "BULB2.a"
+              ],
+              [
+                "BULB2.b",
                 "B1.b"
               ]
             ]
@@ -872,6 +926,11 @@
                   },
                   {
                     "type": "bulb",
+                    "x": 16,
+                    "y": 2
+                  },
+                  {
+                    "type": "bulb",
                     "x": 21,
                     "y": 2,
                     "rot": 1
@@ -892,6 +951,10 @@
                   ],
                   [
                     "BULB2.b",
+                    "BULB3.a"
+                  ],
+                  [
+                    "BULB3.b",
                     "B1.b"
                   ]
                 ]
@@ -1049,12 +1112,26 @@
             "2": "Add them all: {a} + {b} + {c} = {answer} W.",
             "3": "{m} × 10⁻³ A is {m} mA. P = V × I = {V} × {m} ÷ 1000 = {answer} W."
           },
-          "wrong": [
-            {
-              "expr": "a * b * c",
-              "why": "Total power is a sum. Add, do not multiply."
-            }
-          ],
+          "wrong": {
+            "1": [
+              {
+                "expr": "a * b * c",
+                "why": "Total power is a sum. Add, do not multiply."
+              }
+            ],
+            "2": [
+              {
+                "expr": "a * b * c",
+                "why": "Total power is a sum. Add, do not multiply."
+              }
+            ],
+            "3": [
+              {
+                "expr": "V * m",
+                "why": "The × 10⁻³ means thousandths. Divide by 1000 to get amps."
+              }
+            ]
+          },
           "hints": [
             "Total power is the sum of the parts.",
             "Add every part.",

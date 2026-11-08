@@ -156,12 +156,26 @@
             "2": "(R1 × R2) ÷ (R1 + R2) = ({R1} × {R2}) ÷ ({R1} + {R2}) = {answer} Ω.",
             "3": "R_total = ({R1} × {R2}) ÷ ({R1} + {R2}) = {Rt} Ω. I = {V} ÷ {Rt} = {answer} mA."
           },
-          "wrong": [
-            {
-              "expr": "R / 1",
-              "why": "Side by side makes the squeeze go DOWN, not stay the same."
-            }
-          ],
+          "wrong": {
+            "1": [
+              {
+                "expr": "R",
+                "why": "Side by side makes the squeeze go DOWN, not stay the same."
+              }
+            ],
+            "2": [
+              {
+                "expr": "R1 + R2",
+                "why": "Adding is for series. Side by side the total gets SMALLER than either path."
+              }
+            ],
+            "3": [
+              {
+                "expr": "V / (R1 + R2) * 1000",
+                "why": "That treats them as series. Side by side, find the parallel total first."
+              }
+            ]
+          },
           "hints": [
             "Side by side means the total is smaller than either path.",
             "Two the same: halve it. Different: multiply, then divide by the sum.",
@@ -578,6 +592,11 @@
               },
               {
                 "type": "bulb",
+                "x": 11,
+                "y": 2
+              },
+              {
+                "type": "bulb",
                 "x": 21,
                 "y": 2,
                 "rot": 1
@@ -594,6 +613,10 @@
               ],
               [
                 "BULB1.b",
+                "BULB2.a"
+              ],
+              [
+                "BULB2.b",
                 "B1.b"
               ]
             ]
@@ -618,6 +641,11 @@
                   },
                   {
                     "type": "bulb",
+                    "x": 11,
+                    "y": 2
+                  },
+                  {
+                    "type": "bulb",
                     "x": 21,
                     "y": 2,
                     "rot": 1
@@ -634,6 +662,10 @@
                   ],
                   [
                     "BULB1.b",
+                    "BULB2.a"
+                  ],
+                  [
+                    "BULB2.b",
                     "B1.b"
                   ]
                 ]

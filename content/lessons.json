@@ -1,5 +1,40 @@
-{ "lessons": [
-  { "id": "ignition", "file": "projects/ignition.json", "title": "Ignition", "blurb": "Get a bulb glowing on the launch pad." },
-  { "id": "headlights", "file": "projects/headlights.json", "title": "Headlights", "blurb": "Light an LED without it retiring early." },
-  { "id": "dimmer", "file": "projects/dimmer.json", "title": "Dimmer", "blurb": "Set the glow with a variable resistor." }
-] }
+{
+  "lessons": [
+    {
+      "id": "ignition",
+      "file": "projects/ignition.json",
+      "title": "Ignition",
+      "blurb": "Get a bulb glowing on the launch pad."
+    },
+    {
+      "id": "headlights",
+      "file": "projects/headlights.json",
+      "title": "Headlights",
+      "blurb": "Light an LED without it retiring early."
+    },
+    {
+      "id": "dimmer",
+      "file": "projects/dimmer.json",
+      "title": "Dimmer",
+      "blurb": "Set the glow with a variable resistor."
+    },
+    {
+      "id": "switch-panel",
+      "file": "projects/switch-panel.json",
+      "title": "Switch Panel",
+      "blurb": "Backup lights: series or parallel?"
+    },
+    {
+      "id": "power-budget",
+      "file": "projects/power-budget.json",
+      "title": "Power Budget",
+      "blurb": "Count the watts and make the battery last."
+    },
+    {
+      "id": "mission-day-failure",
+      "file": "projects/mission-day-failure.json",
+      "title": "Boss: Mission Day Failure",
+      "blurb": "Find the fault. Fix it. T-minus ten minutes."
+    }
+  ]
+}

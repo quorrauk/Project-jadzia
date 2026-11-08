@@ -1,0 +1,1098 @@
+{
+  "id": "mission-day-failure",
+  "title": "Boss: Mission Day Failure",
+  "arc": 1,
+  "stages": [
+    {
+      "type": "briefing",
+      "lines": [
+        "It is Mission Day and Rover's headlight is dead. T-minus ten minutes.",
+        "No new parts. No hints on what is wrong. You have a meter, your Formula Book and what you have learned.",
+        "Find the fault. Fix it. This is what engineers do all day."
+      ]
+    },
+    {
+      "type": "learn",
+      "toy": {
+        "kind": "led-guard",
+        "prompt": "Warm up: remind yourself where an LED is happy."
+      },
+      "chunks": {
+        "1": [
+          "Diagnosing is detective work. Tap a part and read its numbers. Zero flow means the loop is broken somewhere.",
+          "Check three things: is the loop complete, is the LED the right way round, and is there a [[resistor]]?"
+        ],
+        "2": [
+          "Use the readout as your [[multimeter]]. A part with no [[current]] means a break. A burnt part shows grey and needs repairing. And always check the [[resistor]].",
+          "The LED only conducts one way, from its + side to its bar side."
+        ],
+        "3": [
+          "Work systematically: check continuity first (is any current flowing at all), then polarity, then protection. A burnt LED must be repaired, but fix the cause first or it will burn again."
+        ]
+      },
+      "help": {
+        "1": "Look for the break first. No flow means a gap.",
+        "2": "Follow the loop with your finger, part by part.",
+        "3": "Three suspects: a missing wire, an LED the wrong way round, a missing resistor.",
+        "4": "Switch to Training. It is the easiest fault: a missing wire."
+      }
+    },
+    {
+      "type": "mission",
+      "title": "Find the fault",
+      "parts": [
+        "battery",
+        "switch",
+        "resistor",
+        "led"
+      ],
+      "goal": {
+        "all": [
+          {
+            "type": "lit",
+            "part": "led",
+            "min": 1
+          },
+          {
+            "type": "no-burnt"
+          },
+          {
+            "type": "has",
+            "part": "resistor",
+            "min": 1
+          }
+        ]
+      },
+      "solution": {
+        "build": [
+          {
+            "type": "battery",
+            "x": 3,
+            "y": 2,
+            "rot": 1
+          },
+          {
+            "type": "switch",
+            "x": 6,
+            "y": 2,
+            "params": {
+              "closed": true
+            }
+          },
+          {
+            "type": "resistor",
+            "x": 11,
+            "y": 2,
+            "params": {
+              "resistance": 330
+            }
+          },
+          {
+            "type": "led",
+            "x": 21,
+            "y": 2,
+            "rot": 1
+          }
+        ],
+        "wires": [
+          [
+            "B1.a",
+            "SW1.a"
+          ],
+          [
+            "SW1.b",
+            "R1.a"
+          ],
+          [
+            "R1.b",
+            "LED1.a"
+          ],
+          [
+            "LED1.b",
+            "B1.b"
+          ]
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "missing-wire",
+          "battery": 6,
+          "story": "The headlight is dead. Everything looks connected, but nothing is lit. Battery: 6 V.",
+          "solution": {
+            "build": [
+              {
+                "type": "battery",
+                "x": 3,
+                "y": 2,
+                "rot": 1
+              },
+              {
+                "type": "switch",
+                "x": 6,
+                "y": 2,
+                "params": {
+                  "closed": true
+                }
+              },
+              {
+                "type": "resistor",
+                "x": 11,
+                "y": 2,
+                "params": {
+                  "resistance": 330
+                }
+              },
+              {
+                "type": "led",
+                "x": 21,
+                "y": 2,
+                "rot": 1
+              }
+            ],
+            "wires": [
+              [
+                "B1.a",
+                "SW1.a"
+              ],
+              [
+                "SW1.b",
+                "R1.a"
+              ],
+              [
+                "R1.b",
+                "LED1.a"
+              ],
+              [
+                "LED1.b",
+                "B1.b"
+              ]
+            ]
+          },
+          "tiers": {
+            "training": {
+              "start": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "resistor",
+                    "x": 11,
+                    "y": 2,
+                    "params": {
+                      "resistance": 330
+                    }
+                  },
+                  {
+                    "type": "led",
+                    "x": 21,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "R1.b",
+                    "LED1.a"
+                  ],
+                  [
+                    "LED1.b",
+                    "B1.b"
+                  ]
+                ]
+              }
+            },
+            "standard": {
+              "start": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "resistor",
+                    "x": 11,
+                    "y": 2,
+                    "params": {
+                      "resistance": 330
+                    }
+                  },
+                  {
+                    "type": "led",
+                    "x": 21,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "R1.b",
+                    "LED1.a"
+                  ],
+                  [
+                    "LED1.b",
+                    "B1.b"
+                  ]
+                ]
+              }
+            },
+            "stretch": {
+              "start": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "resistor",
+                    "x": 11,
+                    "y": 2,
+                    "params": {
+                      "resistance": 330
+                    }
+                  },
+                  {
+                    "type": "led",
+                    "x": 21,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "R1.b",
+                    "LED1.a"
+                  ],
+                  [
+                    "LED1.b",
+                    "B1.b"
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "backwards-led",
+          "battery": 9,
+          "story": "The headlight will not light, and nothing has popped. Battery: 9 V.",
+          "solution": {
+            "build": [
+              {
+                "type": "battery",
+                "x": 3,
+                "y": 2,
+                "rot": 1
+              },
+              {
+                "type": "switch",
+                "x": 6,
+                "y": 2,
+                "params": {
+                  "closed": true
+                }
+              },
+              {
+                "type": "resistor",
+                "x": 11,
+                "y": 2,
+                "params": {
+                  "resistance": 470
+                }
+              },
+              {
+                "type": "led",
+                "x": 21,
+                "y": 2,
+                "rot": 1
+              }
+            ],
+            "wires": [
+              [
+                "B1.a",
+                "SW1.a"
+              ],
+              [
+                "SW1.b",
+                "R1.a"
+              ],
+              [
+                "R1.b",
+                "LED1.a"
+              ],
+              [
+                "LED1.b",
+                "B1.b"
+              ]
+            ]
+          },
+          "tiers": {
+            "training": {
+              "start": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "resistor",
+                    "x": 11,
+                    "y": 2,
+                    "params": {
+                      "resistance": 470
+                    }
+                  },
+                  {
+                    "type": "led",
+                    "x": 21,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "R1.b",
+                    "LED1.a"
+                  ],
+                  [
+                    "LED1.b",
+                    "B1.b"
+                  ]
+                ]
+              }
+            },
+            "standard": {
+              "start": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "resistor",
+                    "x": 11,
+                    "y": 2,
+                    "params": {
+                      "resistance": 470
+                    }
+                  },
+                  {
+                    "type": "led",
+                    "x": 21,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "R1.a"
+                  ],
+                  [
+                    "R1.b",
+                    "LED1.b"
+                  ],
+                  [
+                    "LED1.a",
+                    "B1.b"
+                  ]
+                ]
+              }
+            },
+            "stretch": {
+              "start": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "resistor",
+                    "x": 11,
+                    "y": 2,
+                    "params": {
+                      "resistance": 470
+                    }
+                  },
+                  {
+                    "type": "led",
+                    "x": 21,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "R1.a"
+                  ],
+                  [
+                    "R1.b",
+                    "LED1.b"
+                  ],
+                  [
+                    "LED1.a",
+                    "B1.b"
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "popped-led",
+          "battery": 9,
+          "story": "The LED popped on the pad. Fix the cause, not just the symptom. Battery: 9 V.",
+          "solution": {
+            "build": [
+              {
+                "type": "battery",
+                "x": 3,
+                "y": 2,
+                "rot": 1
+              },
+              {
+                "type": "switch",
+                "x": 6,
+                "y": 2,
+                "params": {
+                  "closed": true
+                }
+              },
+              {
+                "type": "resistor",
+                "x": 11,
+                "y": 2,
+                "params": {
+                  "resistance": 470
+                }
+              },
+              {
+                "type": "led",
+                "x": 21,
+                "y": 2,
+                "rot": 1
+              }
+            ],
+            "wires": [
+              [
+                "B1.a",
+                "SW1.a"
+              ],
+              [
+                "SW1.b",
+                "R1.a"
+              ],
+              [
+                "R1.b",
+                "LED1.a"
+              ],
+              [
+                "LED1.b",
+                "B1.b"
+              ]
+            ]
+          },
+          "tiers": {
+            "training": {
+              "start": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "resistor",
+                    "x": 11,
+                    "y": 2,
+                    "params": {
+                      "resistance": 470
+                    }
+                  },
+                  {
+                    "type": "led",
+                    "x": 21,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "R1.b",
+                    "LED1.a"
+                  ],
+                  [
+                    "LED1.b",
+                    "B1.b"
+                  ]
+                ]
+              }
+            },
+            "standard": {
+              "start": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "led",
+                    "x": 21,
+                    "y": 2,
+                    "rot": 1,
+                    "burnt": true
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "LED1.a"
+                  ],
+                  [
+                    "LED1.b",
+                    "B1.b"
+                  ]
+                ]
+              }
+            },
+            "stretch": {
+              "start": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "led",
+                    "x": 21,
+                    "y": 2,
+                    "rot": 1,
+                    "burnt": true
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "LED1.a"
+                  ],
+                  [
+                    "LED1.b",
+                    "B1.b"
+                  ]
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "tiers": {
+        "training": {
+          "text": "Training: one wire has fallen off. Find it and fix it."
+        },
+        "standard": {
+          "text": "Find and fix the fault so the LED glows and nothing burns out."
+        },
+        "stretch": {
+          "text": "Stretch: fix it AND make the LED carry between 5 and 15 mA.",
+          "goal": {
+            "all": [
+              {
+                "type": "lit",
+                "part": "led",
+                "min": 1
+              },
+              {
+                "type": "no-burnt"
+              },
+              {
+                "type": "has",
+                "part": "resistor",
+                "min": 1
+              },
+              {
+                "type": "current",
+                "part": "led",
+                "min": 0.005,
+                "max": 0.015
+              }
+            ]
+          }
+        }
+      },
+      "hints": [
+        "Tap each part and read the numbers. Where does the flow stop?",
+        "Three suspects: a gap in the loop, an LED wired backwards, a missing resistor.",
+        "You can delete a wire (tap it, then Delete) and wire it again. A burnt part needs Repair, but fix the cause first."
+      ],
+      "help": {
+        "1": "Start with the easy suspect: is every part joined?",
+        "2": "Trace the loop from the battery + all the way back to −.",
+        "3": "No flow anywhere: a gap. Grey part: burnt. Dark LED with flow: wrong way round.",
+        "4": "Switch to Training for the simplest fault, then try Standard again."
+      }
+    },
+    {
+      "type": "debrief",
+      "lines": [
+        "You diagnosed it with the evidence: where the flow stopped, which part was grey, which way the LED faced.",
+        "That is real engineering. Find the cause, fix the cause, check the fix.",
+        "Arc 1 complete. Launch Prep is done. Now your Certificate of Launch Readiness is next, and then the sensors."
+      ]
+    },
+    {
+      "type": "python",
+      "title": "Debug the script",
+      "task": "This script should print the LED current in milliamps, but the answer is wrong. Find the bug and fix it.",
+      "starter": "# Should print about 14.9 (milliamps)\nvoltage = 9\nled_drop = 2\nresistance = 470\ncurrent = (voltage - led_drop) / resistance\nprint(\"Current in mA:\", current * 100)\n",
+      "expect": [
+        {
+          "kind": "output-contains",
+          "text": "14.89"
+        }
+      ],
+      "hints": [
+        "Look at the last line. How many milliamps are in one amp?",
+        "It should be times 1000, not times 100."
+      ],
+      "help": {
+        "1": "The sum is right. The conversion is wrong.",
+        "2": "Amps to milliamps: how many milliamps in 1 amp?",
+        "3": "There are 1000. The code uses 100.",
+        "4": "Change 100 to 1000 and run it again."
+      }
+    },
+    {
+      "type": "maths",
+      "title": "Mixed review",
+      "questions": [
+        {
+          "prompt": {
+            "1": "A {Vs} V battery, a {Vf} V LED and a {R} Ω resistor. How many milliamps flow?",
+            "2": "A {Vs} V battery, a {Vf} V LED and a {R} Ω resistor. How many milliamps flow?",
+            "3": "Two identical LEDs ({Vf} V each) in series with a {R} Ω resistor on a {Vs} V battery. How many milliamps flow?"
+          },
+          "unit": "mA",
+          "gen": {
+            "1": {
+              "vars": {
+                "Vs": {
+                  "pick": [
+                    9
+                  ]
+                },
+                "Vf": {
+                  "pick": [
+                    2
+                  ]
+                },
+                "R": {
+                  "pick": [
+                    350,
+                    700,
+                    1000
+                  ]
+                }
+              },
+              "answer": "(Vs - Vf) / R * 1000"
+            },
+            "2": {
+              "vars": {
+                "Vs": {
+                  "pick": [
+                    5,
+                    6,
+                    9,
+                    12
+                  ]
+                },
+                "Vf": {
+                  "pick": [
+                    2
+                  ]
+                },
+                "R": {
+                  "pick": [
+                    220,
+                    330,
+                    470,
+                    1000
+                  ]
+                }
+              },
+              "answer": "(Vs - Vf) / R * 1000",
+              "dp": 1
+            },
+            "3": {
+              "vars": {
+                "Vs": {
+                  "pick": [
+                    9,
+                    12
+                  ]
+                },
+                "Vf": {
+                  "pick": [
+                    2,
+                    2.2
+                  ]
+                },
+                "R": {
+                  "pick": [
+                    220,
+                    330,
+                    470
+                  ]
+                }
+              },
+              "answer": "(Vs - 2 * Vf) / R * 1000",
+              "dp": 1
+            }
+          },
+          "explain": {
+            "1": "Left for the resistor: {Vs} − {Vf}. I = that ÷ {R} × 1000 = {answer} mA.",
+            "2": "Left for the resistor: {Vs} − {Vf}. I = that ÷ {R} × 1000 = {answer} mA.",
+            "3": "Two LEDs keep 2 × {Vf} V. I = ({Vs} − 2 × {Vf}) ÷ {R} × 1000 = {answer} mA."
+          },
+          "wrong": {
+            "1": [
+              {
+                "expr": "Vs / R * 1000",
+                "why": "That forgot the LED keeps {Vf} V."
+              }
+            ],
+            "2": [
+              {
+                "expr": "Vs / R * 1000",
+                "why": "That forgot the LED keeps {Vf} V."
+              }
+            ],
+            "3": [
+              {
+                "expr": "(Vs - Vf) / R * 1000",
+                "why": "There are TWO LEDs, so they keep 2 × {Vf} V between them."
+              }
+            ]
+          },
+          "hints": [
+            "Take the LED's share off the battery first.",
+            "Then I = V ÷ R, times 1000 for mA.",
+            "Formula Book: LED resistor."
+          ]
+        },
+        {
+          "prompt": {
+            "1": "A motor runs on {V} V and draws {I} A. How many watts does it use?",
+            "2": "A motor runs on {V} V and draws {I} A. How many watts does it use?",
+            "3": "A motor runs on {V} V and draws {I} mA. How many watts does it use?"
+          },
+          "unit": "W",
+          "gen": {
+            "1": {
+              "vars": {
+                "V": {
+                  "pick": [
+                    6,
+                    9,
+                    12
+                  ]
+                },
+                "I": {
+                  "pick": [
+                    1,
+                    2
+                  ]
+                }
+              },
+              "answer": "V * I"
+            },
+            "2": {
+              "vars": {
+                "V": {
+                  "pick": [
+                    4.5,
+                    6,
+                    9
+                  ]
+                },
+                "I": {
+                  "pick": [
+                    0.2,
+                    0.5,
+                    1.5
+                  ]
+                }
+              },
+              "answer": "V * I",
+              "dp": 3
+            },
+            "3": {
+              "vars": {
+                "V": {
+                  "pick": [
+                    4.5,
+                    6,
+                    9
+                  ]
+                },
+                "I": {
+                  "pick": [
+                    200,
+                    500,
+                    750
+                  ]
+                }
+              },
+              "answer": "V * I / 1000",
+              "dp": 3
+            }
+          },
+          "explain": {
+            "1": "P = V × I = {V} × {I} = {answer} W.",
+            "2": "P = V × I = {V} × {I} = {answer} W.",
+            "3": "P = V × I = {V} × ({I} ÷ 1000) = {answer} W."
+          },
+          "wrong": {
+            "1": [
+              {
+                "expr": "V / I",
+                "why": "Power is push × flow. Multiply."
+              }
+            ],
+            "2": [
+              {
+                "expr": "V / I",
+                "why": "Power is push × flow. Multiply."
+              }
+            ],
+            "3": [
+              {
+                "expr": "V * I",
+                "why": "The flow is in milliamps. Divide by 1000 first."
+              }
+            ]
+          },
+          "hints": [
+            "P = V × I.",
+            "Check the units of the flow.",
+            "{V} times the flow in amps."
+          ]
+        },
+        {
+          "prompt": "A {cap} mAh battery powers a robot drawing {d} mA. How many hours will it run?",
+          "unit": "h",
+          "gen": {
+            "1": {
+              "vars": {
+                "cap": {
+                  "pick": [
+                    1000,
+                    2000,
+                    3000
+                  ]
+                },
+                "d": {
+                  "pick": [
+                    100,
+                    200,
+                    500,
+                    1000
+                  ]
+                }
+              },
+              "answer": "cap / d",
+              "where": [
+                "cap / d == round(cap / d)"
+              ]
+            },
+            "2": {
+              "vars": {
+                "cap": {
+                  "pick": [
+                    1000,
+                    1500,
+                    2000,
+                    2500,
+                    3000
+                  ]
+                },
+                "d": {
+                  "pick": [
+                    120,
+                    150,
+                    200,
+                    250,
+                    400
+                  ]
+                }
+              },
+              "answer": "cap / d",
+              "dp": 1
+            },
+            "3": {
+              "vars": {
+                "cap": {
+                  "pick": [
+                    2000,
+                    2500,
+                    3000,
+                    5000
+                  ]
+                },
+                "d": {
+                  "pick": [
+                    120,
+                    150,
+                    180,
+                    240,
+                    350
+                  ]
+                }
+              },
+              "answer": "cap / d",
+              "dp": 1
+            }
+          },
+          "explain": "hours = capacity ÷ current = {cap} ÷ {d} = {answer} h.",
+          "wrong": [
+            {
+              "expr": "cap * d",
+              "why": "Divide the battery size by what the robot draws."
+            }
+          ],
+          "hints": [
+            "hours = capacity ÷ current.",
+            "Both are in milli-units, so they cancel.",
+            "{cap} ÷ {d}."
+          ]
+        }
+      ]
+    }
+  ]
+}

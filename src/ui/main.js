@@ -109,6 +109,7 @@ function start(config, store, content) {
         },
         onLevelChange: (level) => store.updateProfile(profile.id, { level }),
         onAdaptiveChange: (adaptive) => store.updateProfile(profile.id, { adaptive }),
+        seed: Number(new URLSearchParams(window.location.search).get('seed')) || undefined,
       });
     } catch (err) {
       app.replaceChildren(el('p', { class: 'error', 'data-testid': 'fatal' }, `Could not open mission: ${err.message}`));
