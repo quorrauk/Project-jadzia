@@ -1,0 +1,15 @@
+{
+  "programmeName": "Orbital Candidate Programme",
+  "mentorName": "Commander Vega",
+  "robot": { "name": "", "type": "generic" },
+  "learner": { "name": "" },
+  "github": {
+    "owner": "quorrauk",
+    "repo": "Project-jadzia",
+    "branch": "main",
+    "pagesUrl": "https://quorrauk.github.io/Project-jadzia/"
+  },
+  "pyodide": { "version": "PIN-A-VERSION", "selfHost": false },
+  "features": { "pythonSandbox": true, "certificates": true, "offlineCache": true },
+  "contentVersion": 1
+}
