@@ -5,6 +5,8 @@
 
 import { pickForLevel, LEVEL_IDS } from '../progress/levels.js';
 import { evaluate } from '../sandbox/model.js';
+import { instantiate } from './generate.js';
+import { boardFromSpec } from './boards.js';
 
 export const STAGE_TYPES = ['briefing', 'learn', 'equation', 'example', 'try', 'mission', 'debrief', 'python', 'maths'];
 export const TIERS = ['training', 'standard', 'stretch'];
@@ -108,6 +110,24 @@ export function checkAnswer(question, input) {
 
 // ---------------------------------------------------------------- missions
 
+const TIER_KEYS = ['training', 'standard', 'stretch'];
+
+/**
+ * Missions can carry several scenarios (different story, battery, targets) so a replay is a new challenge.
+ * A scenario may override: story, parts, goal, and any tier (merged into the base tier).
+ * `index` is taken modulo the number of scenarios, so replays can simply count up.
+ */
+export function pickScenario(stage, index) {
+  const list = stage.scenarios;
+  if (!list?.length) return { ...stage, scenarioId: null };
+  const sc = list[((index % list.length) + list.length) % list.length];
+  const { id, tiers, ...rest } = sc;
+  const merged = { ...stage.tiers };
+  for (const t of Object.keys(tiers ?? {})) merged[t] = { ...(stage.tiers?.[t] ?? {}), ...tiers[t] };
+  return { ...stage, ...rest, tiers: merged, scenarioId: id ?? null, scenarios: undefined };
+}
+
+
 function clone(board) {
   return JSON.parse(JSON.stringify(board));
 }
@@ -130,7 +150,7 @@ export function checkGoal(goal, board) {
   const reading = (p) => result.components?.[p.id] ?? {};
   switch (goal.type) {
     case 'lit': {
-      const n = ofType.filter((p) => !p.burnt && reading(p).lit).length;
+      const n = ofType.filter((p) => !p.burnt && reading(p).lit && (goal.brightness === undefined || (reading(p).brightness ?? 0) >= goal.brightness)).length;
       const met = n >= (goal.min ?? 1);
       return { met, notes: met ? [] : [`${n} lit so far`], note: `${n} lit so far` };
     }
@@ -141,6 +161,16 @@ export function checkGoal(goal, board) {
       });
       const met = ok.length >= (goal.count ?? 1);
       return { met, notes: met ? [] : ['current is not in range yet'], note: 'current is not in range yet' };
+    }
+    case 'brightness': {
+      const ok = ofType.filter((p) => !p.burnt && (reading(p).brightness ?? 0) >= (goal.min ?? 0) && (reading(p).brightness ?? 0) <= (goal.max ?? Infinity));
+      const met = ok.length >= (goal.count ?? 1);
+      return { met, notes: met ? [] : ['the brightness is not in the right range yet'], note: 'the brightness is not in the right range yet' };
+    }
+    case 'has': {
+      const n = ofType.filter((p) => !p.burnt).length;
+      const met = n >= (goal.min ?? 1);
+      return { met, notes: met ? [] : [`you need ${goal.min ?? 1} ${goal.part}`], note: `you need ${goal.min ?? 1} ${goal.part}` };
     }
     case 'no-burnt': {
       const met = !work.parts.some((p) => p.burnt);
@@ -192,16 +222,73 @@ export function validateLesson(def, glossaryIds = [], formulaIds = []) {
       if (!glossaryIds.includes(t)) bad(`${at}: glossary term [[${t}]] is not defined`);
     }
     if (st.type === 'equation' && !formulaIds.includes(st.formula)) bad(`${at}: formula "${st.formula}" not found`);
-    if ((st.type === 'try' || st.type === 'maths') ) {
-      for (const [qi, q] of (st.questions ?? []).entries()) {
-        if (typeof q.answer !== 'number') bad(`${at} q${qi + 1}: answer must be a number`);
-        if (!q.explain) bad(`${at} q${qi + 1}: needs an explanation (wrong answers must teach)`);
-        if (!q.hints || q.hints.length < 1) bad(`${at} q${qi + 1}: needs at least one hint`);
-      }
+    if (st.type === 'try' || st.type === 'maths') {
       if (!st.questions?.length) bad(`${at}: no questions`);
+      for (const [qi, qRaw] of (st.questions ?? []).entries()) {
+        for (const level of LEVEL_IDS) {
+          const q = resolveDeep(qRaw, level).value;
+          const qat = `${at} q${qi + 1} level ${level}`;
+          if (!q.gen && typeof q.answer !== 'number') bad(`${qat}: answer must be a number`);
+          if (!q.prompt) bad(`${qat}: no prompt`);
+          if (!q.explain) bad(`${qat}: needs an explanation (wrong answers must teach)`);
+          if (!q.hints || q.hints.length < 1) bad(`${qat}: needs at least one hint`);
+          if (!q.gen) continue;
+          // Many seeds at every level: every draw must work, be fully filled in, and have a sensible answer.
+          for (let seed = 0; seed < 40; seed++) {
+            try {
+              const inst = instantiate(q, seed);
+              const text = [inst.prompt, inst.explain, ...inst.hints, ...inst.wrong.map((w) => w.why)].join(' ');
+              if (/[{}]/.test(text)) { bad(`${qat}: unfilled {placeholder}`); break; }
+              if (!Number.isFinite(inst.answer)) { bad(`${qat}: answer is not a number`); break; }
+              if (inst.answer <= 0 && !q.allowNonPositive) { bad(`${qat}: answer ${inst.answer} is not positive`); break; }
+            } catch (err) {
+              bad(`${qat}: seed ${seed}: ${err.message}`);
+              break;
+            }
+          }
+        }
+      }
+    }
+    if (st.type === 'python') {
+      if (!st.task) bad(`${at}: no task`);
+      if (typeof st.starter !== 'string') bad(`${at}: no starter code`);
+      if (!st.expect || !st.expect.length) bad(`${at}: needs expect (what the output must contain)`);
+      if (!st.hints || st.hints.length < 2) bad(`${at}: needs at least two hints`);
     }
     if (st.type === 'mission') {
-      if (!st.goal) bad(`${at}: no goal`);
+      for (const [si, sc] of (st.scenarios ?? []).entries()) {
+        const merged = pickScenario(st, si);
+        if (!merged.goal) bad(`${at} scenario ${si + 1}: no goal`);
+        for (const [tn, tier] of Object.entries(merged.tiers ?? {})) {
+          try {
+            const b = boardFromSpec(tier.start, { battery: sc.battery });
+            if (tier.start === 'empty' || !tier.start) continue;
+            if (!b.parts.length) bad(`${at} scenario ${si + 1} ${tn}: start board is empty`);
+          } catch (err) {
+            bad(`${at} scenario ${si + 1} ${tn}: ${err.message}`);
+          }
+        }
+      }
+      if (!st.goal && !st.scenarios?.every((sc) => sc.goal)) bad(`${at}: no goal`);
+      // Never stuck: every scenario x tier has a solution that meets its goal, and the start board does not already meet it.
+      const variants = st.scenarios?.length ? st.scenarios.map((_, i) => pickScenario(st, i)) : [pickScenario(st, 0)];
+      for (const [vi, m] of variants.entries()) {
+        for (const [tn, tier] of Object.entries(m.tiers ?? {})) {
+          const where = `${at} scenario ${vi + 1} ${tn}`;
+          const goal = tier.goal ?? m.goal;
+          const solution = tier.solution ?? m.solution;
+          if (!goal) continue;
+          if (!solution) { bad(`${where}: no solution board (needed to prove the mission is winnable)`); continue; }
+          try {
+            const start = boardFromSpec(tier.start, { battery: m.battery });
+            if (checkGoal(goal, start).met) bad(`${where}: already complete at the start`);
+            const won = checkGoal(goal, boardFromSpec(solution, { battery: m.battery }));
+            if (!won.met) bad(`${where}: the solution board does not meet the goal (${won.notes.join(', ')})`);
+          } catch (err) {
+            bad(`${where}: ${err.message}`);
+          }
+        }
+      }
       if (!st.tiers?.standard) bad(`${at}: needs a standard tier`);
       if (!st.hints || st.hints.length < 3) bad(`${at}: needs three hint tiers`);
       for (const tier of Object.keys(st.tiers ?? {})) if (!TIERS.includes(tier)) bad(`${at}: unknown tier ${tier}`);

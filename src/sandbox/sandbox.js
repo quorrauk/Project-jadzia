@@ -95,7 +95,7 @@ function template(allowedParts, embedded) {
   </section>`;
 }
 
-export function mountWorkshop(container, { profile, onSave, onExit, onLevelChange, embedded = false, allowedParts = null }) {
+export function mountWorkshop(container, { profile, onSave, onExit, onLevelChange, embedded = false, allowedParts = null, partDefaults = null }) {
   let level = profile.level;
   let board = loadBoard(profile.workshop);
   const ui = {
@@ -183,7 +183,7 @@ export function mountWorkshop(container, { profile, onSave, onExit, onLevelChang
       notify(NOTICE.taken);
       return render();
     }
-    const res = addPart(board, type, spot.x, spot.y);
+    const res = addPart(board, type, spot.x, spot.y, { params: partDefaults?.[type] });
     if (!res.ok) {
       notify(NOTICE[res.reason] ?? NOTICE.invalid);
       return render();

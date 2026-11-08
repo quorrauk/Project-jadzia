@@ -5,15 +5,168 @@
       "name": "Ohm's law",
       "equation": "V = I × R",
       "symbols": [
-        { "symbol": "V", "name": "voltage (the push)", "unit": "volts, V" },
-        { "symbol": "I", "name": "current (the flow)", "unit": "amps, A" },
-        { "symbol": "R", "name": "resistance (the squeeze)", "unit": "ohms, Ω" }
+        {
+          "symbol": "V",
+          "name": "voltage (the push)",
+          "unit": "volts, V"
+        },
+        {
+          "symbol": "I",
+          "name": "current (the flow)",
+          "unit": "amps, A"
+        },
+        {
+          "symbol": "R",
+          "name": "resistance (the squeeze)",
+          "unit": "ohms, Ω"
+        }
       ],
-      "rearranged": ["I = V ÷ R", "R = V ÷ I"],
+      "rearranged": [
+        "I = V ÷ R",
+        "R = V ÷ I"
+      ],
       "plain": {
         "1": "Push = flow × squeeze. Know any two and you can work out the third.",
         "2": "Voltage equals current times resistance. Cover the letter you want in the triangle and read off the rest.",
         "4": "For an ohmic conductor, the potential difference across it is proportional to the current through it."
+      }
+    },
+    {
+      "id": "led-resistor",
+      "name": "LED resistor",
+      "equation": "R = (Vs − Vf) ÷ I",
+      "symbols": [
+        {
+          "symbol": "R",
+          "name": "the resistor you need",
+          "unit": "ohms, Ω"
+        },
+        {
+          "symbol": "Vs",
+          "name": "battery voltage",
+          "unit": "volts, V"
+        },
+        {
+          "symbol": "Vf",
+          "name": "the LED's own voltage (about 2 V for red)",
+          "unit": "volts, V"
+        },
+        {
+          "symbol": "I",
+          "name": "flow you want through the LED",
+          "unit": "amps, A"
+        }
+      ],
+      "rearranged": [
+        "I = (Vs − Vf) ÷ R"
+      ],
+      "plain": {
+        "1": "The LED keeps some of the push for itself. The resistor handles the rest. Push left over ÷ flow you want = squeeze to add.",
+        "2": "The resistor drops the voltage the LED does not use: Vs − Vf. Then use Ohm's law on that.",
+        "3": "Apply V = IR across the resistor alone, where V = Vs − Vf. Convert mA to A first."
+      }
+    },
+    {
+      "id": "series-resistance",
+      "name": "Resistors in series",
+      "equation": "R_total = R1 + R2",
+      "symbols": [
+        {
+          "symbol": "R_total",
+          "name": "squeeze of the whole chain",
+          "unit": "ohms, Ω"
+        },
+        {
+          "symbol": "R1, R2",
+          "name": "squeeze of each part",
+          "unit": "ohms, Ω"
+        }
+      ],
+      "rearranged": [
+        "R2 = R_total − R1"
+      ],
+      "plain": {
+        "1": "Parts one after another add up their squeeze.",
+        "2": "In series the resistances add, and the same current flows through every part."
+      }
+    },
+    {
+      "id": "parallel-resistance",
+      "name": "Resistors in parallel",
+      "equation": "R_total = (R1 × R2) ÷ (R1 + R2)",
+      "symbols": [
+        {
+          "symbol": "R_total",
+          "name": "squeeze of both paths together",
+          "unit": "ohms, Ω"
+        },
+        {
+          "symbol": "R1, R2",
+          "name": "squeeze of each path",
+          "unit": "ohms, Ω"
+        }
+      ],
+      "rearranged": [
+        "1 ÷ R_total = 1 ÷ R1 + 1 ÷ R2",
+        "Two equal paths: R_total = R ÷ 2"
+      ],
+      "plain": {
+        "1": "Two paths side by side let more through, so the total squeeze goes DOWN. Two the same make half.",
+        "2": "Add the fractions: 1/R_total = 1/R1 + 1/R2. The total is always smaller than the smallest path."
+      }
+    },
+    {
+      "id": "power",
+      "name": "Power",
+      "equation": "P = V × I",
+      "symbols": [
+        {
+          "symbol": "P",
+          "name": "power (how fast energy is used)",
+          "unit": "watts, W"
+        },
+        {
+          "symbol": "V",
+          "name": "voltage",
+          "unit": "volts, V"
+        },
+        {
+          "symbol": "I",
+          "name": "current",
+          "unit": "amps, A"
+        }
+      ],
+      "rearranged": [
+        "I = P ÷ V",
+        "V = P ÷ I"
+      ],
+      "plain": {
+        "1": "Power is how hungry a part is. Push × flow = watts.",
+        "3": "P = VI, and with Ohm's law also P = I²R and P = V²/R. Use standard form for very big or small numbers."
+      }
+    },
+    {
+      "id": "battery-life",
+      "name": "Battery life",
+      "equation": "hours = capacity ÷ current",
+      "symbols": [
+        {
+          "symbol": "capacity",
+          "name": "what the battery holds",
+          "unit": "milliamp-hours, mAh"
+        },
+        {
+          "symbol": "current",
+          "name": "what the robot draws",
+          "unit": "milliamps, mA"
+        }
+      ],
+      "rearranged": [
+        "current = capacity ÷ hours"
+      ],
+      "plain": {
+        "1": "A bigger battery lasts longer. A hungrier robot drains it faster. Size ÷ appetite = hours.",
+        "2": "Run time in hours = capacity (mAh) ÷ current draw (mA). Real batteries give a little less."
       }
     }
   ]

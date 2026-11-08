@@ -1,0 +1,1134 @@
+{
+  "id": "power-budget",
+  "title": "Power Budget",
+  "arc": 1,
+  "stages": [
+    {
+      "type": "briefing",
+      "lines": [
+        "Every part of Rover eats energy. The battery is the fuel tank.",
+        "Today you learn to count how much each part eats, and how long Rover will run."
+      ]
+    },
+    {
+      "type": "learn",
+      "toy": {
+        "kind": "battery-life",
+        "prompt": "Change the battery size and how hungry the robot is. Watch the hours."
+      },
+      "chunks": {
+        "1": [
+          "A big [[capacity]] battery lasts longer. A hungry robot drains it faster.",
+          "[[power]] is how hungry a part is, measured in watts (W).",
+          "Count up the power of every part and you know what the battery must supply."
+        ],
+        "2": [
+          "[[capacity]] is in milliamp-hours (mAh). Divide it by the [[current]] the robot draws in [[milliamp]] and you get hours.",
+          "[[power]] = [[voltage]] × [[current]], in watts (W)."
+        ],
+        "3": [
+          "[[power]] P = V × I, in watts. Energy used = P × time. Run time ≈ [[capacity]] (mAh) ÷ [[current]] (mA), less in practice.",
+          "Very small and very large quantities are written in standard form: 3.2 × 10⁻³ A is 3.2 [[milliamp]]."
+        ]
+      },
+      "help": {
+        "1": "Big battery = long time. Hungry robot = short time.",
+        "2": "A fuel tank: a big tank and a thirsty engine. Time = tank ÷ thirst.",
+        "3": "Try 2000 mAh and 200 mA. That is 10 hours.",
+        "4": "Slide each slider and watch the hours. The rule is on the screen."
+      }
+    },
+    {
+      "type": "equation",
+      "formula": "power",
+      "intro": {
+        "1": "Push × flow is how hungry a part is.",
+        "2": "[[power]] in watts is [[voltage]] times [[current]]. Into the Formula Book.",
+        "3": "P = VI. Into the Formula Book."
+      }
+    },
+    {
+      "type": "example",
+      "title": "Worked example",
+      "steps": {
+        "1": [
+          "Rover's motor: 6 V push, 2 A flow.",
+          "Power = push × flow.",
+          "6 × 2 = 12.",
+          "The motor uses 12 W."
+        ],
+        "3": [
+          "V = 6 V, I = 2 A.",
+          "P = V × I = 6 × 2.",
+          "P = 12 W.",
+          "In one hour it uses 12 Wh of energy."
+        ]
+      }
+    },
+    {
+      "type": "try",
+      "title": "Try one",
+      "questions": [
+        {
+          "prompt": {
+            "1": "A part runs on {V} V and draws {I} A. How many watts does it use?",
+            "2": "A part runs on {V} V and draws {I} A. How many watts does it use?",
+            "3": "A part runs on {V} V and draws {I} mA. How many watts does it use?"
+          },
+          "unit": "W",
+          "gen": {
+            "1": {
+              "vars": {
+                "V": {
+                  "pick": [
+                    3,
+                    6,
+                    9,
+                    12
+                  ]
+                },
+                "I": {
+                  "pick": [
+                    1,
+                    2,
+                    3
+                  ]
+                }
+              },
+              "answer": "V * I"
+            },
+            "2": {
+              "vars": {
+                "V": {
+                  "pick": [
+                    3,
+                    4.5,
+                    6,
+                    9
+                  ]
+                },
+                "I": {
+                  "pick": [
+                    0.1,
+                    0.2,
+                    0.5,
+                    1.5
+                  ]
+                }
+              },
+              "answer": "V * I",
+              "dp": 3
+            },
+            "3": {
+              "vars": {
+                "V": {
+                  "pick": [
+                    3,
+                    4.5,
+                    6,
+                    9
+                  ]
+                },
+                "I": {
+                  "pick": [
+                    50,
+                    120,
+                    250,
+                    500
+                  ]
+                }
+              },
+              "answer": "V * I / 1000",
+              "dp": 3
+            }
+          },
+          "explain": {
+            "1": "P = V × I = {V} × {I} = {answer} W.",
+            "2": "P = V × I = {V} × {I} = {answer} W.",
+            "3": "P = V × I = {V} × ({I} ÷ 1000) = {answer} W."
+          },
+          "wrong": [
+            {
+              "expr": "V / I",
+              "why": "Power is push × flow, so multiply."
+            }
+          ],
+          "hints": [
+            "Look up power in the Formula Book.",
+            "P = V × I.",
+            "{V} times the flow."
+          ]
+        }
+      ],
+      "help": {
+        "1": "Push times flow.",
+        "2": "Like cost = price × amount.",
+        "3": "Example: 6 V × 2 A = 12 W.",
+        "4": "Watch: multiply {V} by the flow. Then add the unit, watts."
+      }
+    },
+    {
+      "type": "equation",
+      "formula": "battery-life",
+      "intro": {
+        "1": "How long will it last? Size of the tank divided by how fast you drain it.",
+        "2": "Run time = [[capacity]] ÷ [[current]]. Into the Formula Book.",
+        "3": "hours = mAh ÷ mA. Into the Formula Book."
+      }
+    },
+    {
+      "type": "try",
+      "title": "Try battery life",
+      "questions": [
+        {
+          "prompt": {
+            "1": "A {cap} mAh battery. The robot draws {d} mA. How many hours does it last?",
+            "2": "A {cap} mAh battery. The robot draws {d} mA. How many hours does it last?",
+            "3": "A {cap} mAh battery. The motors draw {a} mA and the lights {b} mA. How many hours does it last?"
+          },
+          "unit": "h",
+          "gen": {
+            "1": {
+              "vars": {
+                "cap": {
+                  "pick": [
+                    1000,
+                    2000,
+                    3000
+                  ]
+                },
+                "d": {
+                  "pick": [
+                    100,
+                    200,
+                    500,
+                    1000
+                  ]
+                }
+              },
+              "answer": "cap / d",
+              "where": [
+                "cap / d == round(cap / d)"
+              ]
+            },
+            "2": {
+              "vars": {
+                "cap": {
+                  "pick": [
+                    1000,
+                    1500,
+                    2000,
+                    2500,
+                    3000
+                  ]
+                },
+                "d": {
+                  "pick": [
+                    120,
+                    150,
+                    200,
+                    250,
+                    400
+                  ]
+                }
+              },
+              "answer": "cap / d",
+              "dp": 1
+            },
+            "3": {
+              "vars": {
+                "cap": {
+                  "pick": [
+                    2000,
+                    2500,
+                    3000,
+                    5000
+                  ]
+                },
+                "a": {
+                  "pick": [
+                    150,
+                    200,
+                    300
+                  ]
+                },
+                "b": {
+                  "pick": [
+                    50,
+                    100
+                  ]
+                }
+              },
+              "answer": "cap / (a + b)",
+              "dp": 1
+            }
+          },
+          "explain": {
+            "1": "hours = capacity ÷ current = {cap} ÷ {d} = {answer} h.",
+            "2": "hours = capacity ÷ current = {cap} ÷ {d} = {answer} h.",
+            "3": "Total draw = {a} + {b} mA. hours = {cap} ÷ ({a} + {b}) = {answer} h."
+          },
+          "wrong": [
+            {
+              "expr": "cap * 1",
+              "why": "Divide the battery size by what the robot uses."
+            }
+          ],
+          "hints": [
+            "hours = capacity ÷ current.",
+            "Make sure both are in milliamps.",
+            "Divide the big number by the small one."
+          ]
+        }
+      ]
+    },
+    {
+      "type": "mission",
+      "title": "Stay under budget",
+      "parts": [
+        "battery",
+        "switch",
+        "bulb"
+      ],
+      "goal": {
+        "all": [
+          {
+            "type": "lit",
+            "part": "bulb",
+            "min": 2
+          },
+          {
+            "type": "current",
+            "part": "battery",
+            "min": 0.01,
+            "max": 0.15
+          },
+          {
+            "type": "no-burnt"
+          }
+        ]
+      },
+      "solution": {
+        "build": [
+          {
+            "type": "battery",
+            "x": 3,
+            "y": 2,
+            "rot": 1
+          },
+          {
+            "type": "switch",
+            "x": 6,
+            "y": 2,
+            "params": {
+              "closed": true
+            }
+          },
+          {
+            "type": "bulb",
+            "x": 21,
+            "y": 2,
+            "rot": 1
+          }
+        ],
+        "wires": [
+          [
+            "B1.a",
+            "SW1.a"
+          ],
+          [
+            "SW1.b",
+            "BULB1.a"
+          ],
+          [
+            "BULB1.b",
+            "B1.b"
+          ]
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "hot-pack",
+          "battery": 4.5,
+          "story": "The battery pack overheats above 150 mA. Light two bulbs without going over. Battery: 4.5 V.",
+          "goal": {
+            "all": [
+              {
+                "type": "lit",
+                "part": "bulb",
+                "min": 2
+              },
+              {
+                "type": "current",
+                "part": "battery",
+                "min": 0.01,
+                "max": 0.15
+              },
+              {
+                "type": "no-burnt"
+              }
+            ]
+          },
+          "solution": {
+            "build": [
+              {
+                "type": "battery",
+                "x": 3,
+                "y": 2,
+                "rot": 1
+              },
+              {
+                "type": "switch",
+                "x": 6,
+                "y": 2,
+                "params": {
+                  "closed": true
+                }
+              },
+              {
+                "type": "bulb",
+                "x": 21,
+                "y": 2,
+                "rot": 1
+              }
+            ],
+            "wires": [
+              [
+                "B1.a",
+                "SW1.a"
+              ],
+              [
+                "SW1.b",
+                "BULB1.a"
+              ],
+              [
+                "BULB1.b",
+                "B1.b"
+              ]
+            ]
+          },
+          "tiers": {
+            "training": {
+              "start": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 12,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 16,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "BULB1.a"
+                  ],
+                  [
+                    "BULB1.a",
+                    "BULB2.a"
+                  ],
+                  [
+                    "BULB1.b",
+                    "B1.b"
+                  ],
+                  [
+                    "BULB2.b",
+                    "BULB1.b"
+                  ]
+                ]
+              }
+            },
+            "stretch": {
+              "goal": {
+                "all": [
+                  {
+                    "type": "lit",
+                    "part": "bulb",
+                    "min": 3
+                  },
+                  {
+                    "type": "current",
+                    "part": "battery",
+                    "min": 0.01,
+                    "max": 0.15
+                  },
+                  {
+                    "type": "no-burnt"
+                  }
+                ]
+              },
+              "solution": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 11,
+                    "y": 2
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 21,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "BULB1.a"
+                  ],
+                  [
+                    "BULB1.b",
+                    "BULB2.a"
+                  ],
+                  [
+                    "BULB2.b",
+                    "B1.b"
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "long-haul",
+          "battery": 6,
+          "story": "Long haul to the Moon base. Keep the draw under 200 mA and light two bulbs. Battery: 6 V.",
+          "goal": {
+            "all": [
+              {
+                "type": "lit",
+                "part": "bulb",
+                "min": 2
+              },
+              {
+                "type": "current",
+                "part": "battery",
+                "min": 0.01,
+                "max": 0.2
+              },
+              {
+                "type": "no-burnt"
+              }
+            ]
+          },
+          "solution": {
+            "build": [
+              {
+                "type": "battery",
+                "x": 3,
+                "y": 2,
+                "rot": 1
+              },
+              {
+                "type": "switch",
+                "x": 6,
+                "y": 2,
+                "params": {
+                  "closed": true
+                }
+              },
+              {
+                "type": "bulb",
+                "x": 21,
+                "y": 2,
+                "rot": 1
+              }
+            ],
+            "wires": [
+              [
+                "B1.a",
+                "SW1.a"
+              ],
+              [
+                "SW1.b",
+                "BULB1.a"
+              ],
+              [
+                "BULB1.b",
+                "B1.b"
+              ]
+            ]
+          },
+          "tiers": {
+            "training": {
+              "start": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 12,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 16,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "BULB1.a"
+                  ],
+                  [
+                    "BULB1.a",
+                    "BULB2.a"
+                  ],
+                  [
+                    "BULB1.b",
+                    "B1.b"
+                  ],
+                  [
+                    "BULB2.b",
+                    "BULB1.b"
+                  ]
+                ]
+              }
+            },
+            "stretch": {
+              "goal": {
+                "all": [
+                  {
+                    "type": "lit",
+                    "part": "bulb",
+                    "min": 3
+                  },
+                  {
+                    "type": "current",
+                    "part": "battery",
+                    "min": 0.01,
+                    "max": 0.2
+                  },
+                  {
+                    "type": "no-burnt"
+                  }
+                ]
+              },
+              "solution": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 11,
+                    "y": 2
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 21,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "BULB1.a"
+                  ],
+                  [
+                    "BULB1.b",
+                    "BULB2.a"
+                  ],
+                  [
+                    "BULB2.b",
+                    "B1.b"
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "mega-pack",
+          "battery": 9,
+          "story": "A 9 V pack, but only 250 mA is safe. Two bulbs, no pops, under budget.",
+          "goal": {
+            "all": [
+              {
+                "type": "lit",
+                "part": "bulb",
+                "min": 2
+              },
+              {
+                "type": "current",
+                "part": "battery",
+                "min": 0.01,
+                "max": 0.25
+              },
+              {
+                "type": "no-burnt"
+              }
+            ]
+          },
+          "solution": {
+            "build": [
+              {
+                "type": "battery",
+                "x": 3,
+                "y": 2,
+                "rot": 1
+              },
+              {
+                "type": "switch",
+                "x": 6,
+                "y": 2,
+                "params": {
+                  "closed": true
+                }
+              },
+              {
+                "type": "bulb",
+                "x": 21,
+                "y": 2,
+                "rot": 1
+              }
+            ],
+            "wires": [
+              [
+                "B1.a",
+                "SW1.a"
+              ],
+              [
+                "SW1.b",
+                "BULB1.a"
+              ],
+              [
+                "BULB1.b",
+                "B1.b"
+              ]
+            ]
+          },
+          "tiers": {
+            "training": {
+              "start": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 12,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 16,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "BULB1.a"
+                  ],
+                  [
+                    "BULB1.a",
+                    "BULB2.a"
+                  ],
+                  [
+                    "BULB1.b",
+                    "B1.b"
+                  ],
+                  [
+                    "BULB2.b",
+                    "BULB1.b"
+                  ]
+                ]
+              }
+            },
+            "stretch": {
+              "goal": {
+                "all": [
+                  {
+                    "type": "lit",
+                    "part": "bulb",
+                    "min": 3
+                  },
+                  {
+                    "type": "current",
+                    "part": "battery",
+                    "min": 0.01,
+                    "max": 0.25
+                  },
+                  {
+                    "type": "no-burnt"
+                  }
+                ]
+              },
+              "solution": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 11,
+                    "y": 2
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 21,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "BULB1.a"
+                  ],
+                  [
+                    "BULB1.b",
+                    "BULB2.a"
+                  ],
+                  [
+                    "BULB2.b",
+                    "B1.b"
+                  ]
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "tiers": {
+        "training": {
+          "text": "Training: two bulbs are on the board, side by side, and the battery is working too hard. Rewire them so they share the flow.",
+          "start": "empty"
+        },
+        "standard": {
+          "text": "Light two bulbs and keep the battery current under the limit.",
+          "start": "empty"
+        },
+        "stretch": {
+          "text": "Stretch: light three bulbs under the same limit.",
+          "start": "empty"
+        }
+      },
+      "hints": [
+        "Parallel doubles the flow. Which wiring keeps it low?",
+        "In a line, the squeeze adds up, so the flow drops. Two 20 Ω bulbs in series are 40 Ω.",
+        "Select the battery and read its current. Compare it with the limit."
+      ],
+      "help": {
+        "1": "Make the total squeeze bigger. That makes the flow smaller.",
+        "2": "More bulbs in a row means more hurdles, so less flow.",
+        "3": "Example: battery → switch → bulb → bulb → battery. Check the battery current.",
+        "4": "Switch to Training: the lights are there, side by side. Rewire them in a line."
+      }
+    },
+    {
+      "type": "debrief",
+      "lines": [
+        "In a line, the bulbs share the push and the flow stays low. Side by side they each take a full helping.",
+        "Every part you add to Rover makes the battery work harder. Always add up the draw before you add a part.",
+        "One last thing before the big test: the Mission Day Failure."
+      ]
+    },
+    {
+      "type": "python",
+      "title": "Total the robot",
+      "task": "Rover has three parts. Write a script that adds up their power and prints the total. Then say how many hours a 2000 mAh battery at 6 V would last.",
+      "starter": "# Power for each part, in watts\nmotor = 6\nlights = 1.5\nsensor = 0.5\ntotal = motor + lights + sensor\nprint(\"Total watts:\", total)\n",
+      "expect": [
+        {
+          "kind": "code-contains",
+          "text": "total"
+        },
+        {
+          "kind": "output-contains",
+          "text": "8"
+        }
+      ],
+      "hints": [
+        "Add all three variables together.",
+        "Change lights to 2.5 and run it again."
+      ],
+      "help": {
+        "1": "Total = motor + lights + sensor.",
+        "2": "Like adding up your shopping.",
+        "3": "total = motor + lights + sensor.",
+        "4": "Run the starter. Change one number and run it again."
+      }
+    },
+    {
+      "type": "maths",
+      "title": "Maths check",
+      "questions": [
+        {
+          "prompt": {
+            "1": "Rover's motor uses {a} W, lights {b} W and sensor {c} W. What is the total power in watts?",
+            "2": "Rover's motor uses {a} W, lights {b} W and sensor {c} W. What is the total power in watts?",
+            "3": "A sensor draws {m} × 10⁻³ A from a {V} V supply. What power does it use, in watts?"
+          },
+          "unit": "W",
+          "gen": {
+            "1": {
+              "vars": {
+                "a": {
+                  "pick": [
+                    3,
+                    4,
+                    6
+                  ]
+                },
+                "b": {
+                  "pick": [
+                    1,
+                    2
+                  ]
+                },
+                "c": {
+                  "pick": [
+                    1,
+                    2
+                  ]
+                }
+              },
+              "answer": "a + b + c"
+            },
+            "2": {
+              "vars": {
+                "a": {
+                  "pick": [
+                    4.5,
+                    6,
+                    7.5
+                  ]
+                },
+                "b": {
+                  "pick": [
+                    1.5,
+                    2.25
+                  ]
+                },
+                "c": {
+                  "pick": [
+                    0.5,
+                    0.75,
+                    1.25
+                  ]
+                }
+              },
+              "answer": "a + b + c",
+              "dp": 2
+            },
+            "3": {
+              "vars": {
+                "m": {
+                  "pick": [
+                    1.5,
+                    2.2,
+                    3.3,
+                    4.7
+                  ]
+                },
+                "V": {
+                  "pick": [
+                    3,
+                    5,
+                    9
+                  ]
+                }
+              },
+              "answer": "V * m / 1000",
+              "dp": 5
+            }
+          },
+          "explain": {
+            "1": "Add them all: {a} + {b} + {c} = {answer} W.",
+            "2": "Add them all: {a} + {b} + {c} = {answer} W.",
+            "3": "{m} × 10⁻³ A is {m} mA. P = V × I = {V} × {m} ÷ 1000 = {answer} W."
+          },
+          "wrong": [
+            {
+              "expr": "a * b * c",
+              "why": "Total power is a sum. Add, do not multiply."
+            }
+          ],
+          "hints": [
+            "Total power is the sum of the parts.",
+            "Add every part.",
+            "Check your units."
+          ]
+        },
+        {
+          "prompt": "A {P} W part runs for {t} hours. How many watt-hours (Wh) of energy does it use?",
+          "unit": "Wh",
+          "gen": {
+            "vars": {
+              "P": {
+                "pick": [
+                  2,
+                  3,
+                  4.5,
+                  6,
+                  12
+                ]
+              },
+              "t": {
+                "pick": [
+                  2,
+                  3,
+                  4,
+                  5
+                ]
+              }
+            },
+            "answer": "P * t"
+          },
+          "explain": "Energy = power × time = {P} × {t} = {answer} Wh.",
+          "wrong": [
+            {
+              "expr": "P / t",
+              "why": "More time uses MORE energy, so multiply."
+            }
+          ],
+          "hints": [
+            "Energy is power multiplied by time.",
+            "Watts times hours gives watt-hours.",
+            "{P} × {t}."
+          ]
+        },
+        {
+          "prompt": "A robot draws {A} A. How many milliamps is that?",
+          "unit": "mA",
+          "gen": {
+            "vars": {
+              "A": {
+                "pick": [
+                  0.25,
+                  0.5,
+                  1.5,
+                  2.2
+                ]
+              }
+            },
+            "answer": "A * 1000"
+          },
+          "explain": "1 A = 1000 mA, so {A} A = {answer} mA.",
+          "wrong": [
+            {
+              "expr": "A / 1000",
+              "why": "Milliamps are small, so there are MORE of them. Multiply by 1000."
+            }
+          ],
+          "hints": [
+            "1 A is 1000 mA.",
+            "More small units, so multiply.",
+            "{A} × 1000."
+          ]
+        }
+      ]
+    }
+  ]
+}

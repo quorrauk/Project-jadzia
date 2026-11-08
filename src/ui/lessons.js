@@ -2,10 +2,13 @@
 
 import { levelInfo, LEVELS } from '../progress/levels.js';
 import {
-  resolveStage, linkTerms, helpFor, checkAnswer, checkGoal, tierOffer, recordFinish, starsFor, MAX_RUNG,
+  resolveStage, linkTerms, helpFor, checkAnswer, checkGoal, tierOffer, recordFinish, starsFor, pickScenario, MAX_RUNG,
 } from '../lessons/engine.js';
+import { instantiate, hashSeed, fmt } from '../lessons/generate.js';
+import { createTracker, outcomeFor } from '../lessons/adaptive.js';
+import { boardFromSpec } from '../lessons/boards.js';
+import { makeToy } from './toys.js';
 import { mountWorkshop } from '../sandbox/sandbox.js';
-import { createBoard, starterBoard } from '../sandbox/model.js';
 
 function el(tag, attrs = {}, text) {
   const node = document.createElement(tag);
@@ -48,25 +51,34 @@ export function definitionFor(entry, level) {
   return entry.plain[use];
 }
 
-function startBoard(kind) {
-  return kind === 'starter' ? starterBoard() : createBoard();
-}
-
 // ------------------------------------------------------------------ the player
 
-export function mountLesson(container, { def, profile, glossary, formulas, onExit, onFormula, onFinish, onLevelChange }) {
+export function mountLesson(container, { def, profile, glossary, formulas, onExit, onFormula, onFinish, onLevelChange, onAdaptiveChange, seed }) {
   let level = profile.level;
+  let auto = profile.adaptive !== false;
+  const tracker = createTracker(level);
+  let sessionSeed = seed ?? Math.floor(Math.random() * 2 ** 31);
+  let replays = Math.floor(sessionSeed % 997);
   let index = 0;
   let rung = 0;
+  let helpOpen = false;
   let workshop = null;
   let missionTier = 'standard';
   let missionDone = false;
   let finishedTier = null;
   let attempts = 0;
+  let missionHints = 0;
   let termShown = null;
+  let pendingLevel = null;
+  let note = null; // { text, actions: [{label, testid, run}] }
+  const answered = new Set(); // question keys already counted by the tracker
 
   const root = el('section', { class: 'lesson', 'data-testid': 'lesson' });
   container.replaceChildren(root);
+  let helpSlot;
+  let termSlot;
+  let noteSlot;
+  let nextBtn;
 
   function stopWorkshop() {
     if (workshop) {
@@ -75,11 +87,62 @@ export function mountLesson(container, { def, profile, glossary, formulas, onExi
     }
   }
 
+  // ---- level handling (manual always wins)
+
+  function setLevelNow(l) {
+    level = l;
+    pendingLevel = null;
+    note = null;
+    tracker.setLevel(l);
+    onLevelChange(l);
+    render();
+  }
+
+  function recordOutcome(outcome) {
+    const move = tracker.record(outcome);
+    if (!move) return;
+    const to = levelInfo(move.to);
+    const word = move.direction === 'up' ? 'up' : 'down';
+    if (auto) {
+      pendingLevel = move.to;
+      note = {
+        text: move.direction === 'up'
+          ? `Smooth flying. The next stage moves ${word} to Level ${to.id} · ${to.name}.`
+          : `Let's ease off a notch. The next stage moves ${word} to Level ${to.id} · ${to.name}.`,
+        actions: [
+          { label: 'Keep my level', testid: 'level-undo', run: () => { pendingLevel = null; note = null; tracker.setLevel(level); paintNote(); } },
+        ],
+      };
+    } else {
+      note = {
+        text: move.direction === 'up' ? `These look easy. Want to try Level ${to.id} · ${to.name}?` : `These look tricky. Want to try Level ${to.id} · ${to.name}?`,
+        actions: [
+          { label: `Switch to Level ${to.id}`, testid: 'level-suggest', run: () => setLevelNow(move.to) },
+          { label: 'No thanks', testid: 'level-dismiss', run: () => { note = null; tracker.setLevel(level); paintNote(); } },
+        ],
+      };
+    }
+    paintNote();
+  }
+
+  function paintNote() {
+    if (!noteSlot) return;
+    noteSlot.replaceChildren();
+    if (!note) return;
+    const box = el('div', { class: 'note', role: 'status', 'data-testid': 'level-note' });
+    box.append(el('span', {}, note.text));
+    const row = el('div', { class: 'row' });
+    for (const a of note.actions) row.append(btn(a.label, a.testid, a.run));
+    box.append(row);
+    noteSlot.append(box);
+  }
+
+  // ---- header, help, glossary
+
   function header(stage) {
     const bar = el('header', { class: 'ws-top' });
     bar.append(btn('← Base', 'lesson-exit', () => { stopWorkshop(); onExit(); }));
-    const title = el('h1', {}, def.title);
-    bar.append(title);
+    bar.append(el('h1', {}, def.title));
     const label = el('label', { class: 'ws-level' });
     label.append(el('span', { class: 'sr-only' }, 'Level'));
     const select = el('select', { 'data-testid': 'lesson-level' });
@@ -88,44 +151,45 @@ export function mountLesson(container, { def, profile, glossary, formulas, onExi
       if (l.id === level) o.selected = true;
       select.append(o);
     }
-    select.addEventListener('change', () => {
-      level = Number(select.value);
-      onLevelChange(level);
+    select.addEventListener('change', () => setLevelNow(Number(select.value)));
+    label.append(select);
+    const autoBtn = el('button', { type: 'button', class: 'secondary autochip', 'aria-pressed': String(auto), 'data-testid': 'auto-toggle', title: 'Auto level moves you up or down as you go. You can always pick a level yourself.' }, auto ? 'Auto level: on' : 'Auto level: off');
+    autoBtn.style.marginTop = '0';
+    autoBtn.addEventListener('click', () => {
+      auto = !auto;
+      onAdaptiveChange(auto);
+      pendingLevel = null;
+      note = null;
       render();
     });
-    label.append(select);
-    bar.append(label, btn("I don't get it", 'lesson-help', () => { rung = rung === 0 ? 1 : rung; helpOpen = !helpOpen; render(); }));
-    const step = el('p', { class: 'eyebrow', 'data-testid': 'lesson-step' }, `Stage ${index + 1} of ${def.stages.length} · ${STAGE_NAMES[stage.type]}`);
-    return [bar, step];
+    bar.append(label, autoBtn, btn("I don't get it", 'lesson-help', () => { helpOpen = !helpOpen; if (helpOpen && rung === 0) rung = 1; paintHelp(); }));
+    return [bar, el('p', { class: 'eyebrow', 'data-testid': 'lesson-step' }, `Stage ${index + 1} of ${def.stages.length} · ${STAGE_NAMES[stage.type]}`)];
   }
 
-  let helpOpen = false;
-
-  function helpPanel(stage) {
+  function paintHelp() {
+    helpSlot.replaceChildren();
+    if (!helpOpen) return;
+    const stage = resolveStage(def.stages[index], level);
     const h = helpFor(stage, rung || 1);
     const box = el('div', { class: 'ws-help', 'data-testid': 'help-panel' });
     box.append(el('h2', {}, `No problem. Way ${h.rung} of ${MAX_RUNG}`));
     box.append(richText('p', h.text, glossary, showTerm));
     const row = el('div', { class: 'row' });
-    if (!h.last) row.append(btn('Show me another way', 'lhelp-more', () => { rung = h.rung + 1; render(); }));
+    if (!h.last) row.append(btn('Show me another way', 'lhelp-more', () => { rung = h.rung + 1; paintHelp(); }));
     else row.append(el('span', { class: 'muted' }, 'That is the last way. Take your time, and use Back to read it again.'));
-    row.append(btn('Got it', 'lhelp-close', () => { helpOpen = false; rung = 0; render(); }));
+    row.append(btn('Got it', 'lhelp-close', () => { helpOpen = false; rung = 0; paintHelp(); }));
     box.append(row);
-    return box;
+    helpSlot.append(box);
   }
 
   function showTerm(id) {
     termShown = termShown === id ? null : id;
-    render();
-  }
-
-  function termBox() {
-    if (!termShown) return null;
+    termSlot.replaceChildren();
     const entry = glossary.find((g) => g.id === termShown);
-    if (!entry) return null;
+    if (!entry) return;
     const box = el('div', { class: 'term-def', role: 'note', 'data-testid': 'term-def' });
     box.append(el('strong', {}, entry.term), el('span', {}, ` — ${definitionFor(entry, level)}`));
-    return box;
+    termSlot.append(box);
   }
 
   const mentor = (text) => {
@@ -142,35 +206,19 @@ export function mountLesson(container, { def, profile, glossary, formulas, onExi
       case 'debrief':
         for (const line of stage.lines) body.append(mentor(line));
         break;
-      case 'learn': return drawLearn(stage, body);
+      case 'learn':
+        if (stage.toy) body.append(makeToy(typeof stage.toy === 'string' ? { kind: stage.toy, prompt: stage.toyPrompt } : stage.toy));
+        for (const chunk of stage.chunks) body.append(mentor(chunk));
+        break;
       case 'equation': return drawEquation(stage, body);
       case 'example': return drawExample(stage, body);
       case 'try':
       case 'maths': return drawQuestions(stage, body);
       case 'mission': return drawMission(stage, body);
+      case 'python': return drawPython(stage, body);
       default:
         body.append(el('p', { class: 'muted' }, 'This stage is coming in a later update.'));
     }
-  }
-
-  function drawLearn(stage, body) {
-    if (stage.toy === 'bulb-switch') {
-      const toy = el('div', { class: 'toy', 'data-testid': 'toy' });
-      toy.append(el('p', { class: 'muted' }, stage.toyPrompt ?? 'Have a play.'));
-      const lamp = el('div', { class: 'toy-bulb', 'data-testid': 'toy-bulb', 'data-lit': 'false' }, 'Bulb: dark');
-      const sw = el('button', { type: 'button', 'aria-pressed': 'false', 'data-testid': 'toy-switch' }, 'Switch: open');
-      sw.style.marginTop = '0';
-      sw.addEventListener('click', () => {
-        const on = sw.getAttribute('aria-pressed') !== 'true';
-        sw.setAttribute('aria-pressed', String(on));
-        sw.textContent = on ? 'Switch: closed' : 'Switch: open';
-        lamp.dataset.lit = String(on);
-        lamp.textContent = on ? 'Bulb: glowing' : 'Bulb: dark';
-      });
-      toy.append(sw, lamp);
-      body.append(toy);
-    }
-    for (const chunk of stage.chunks) body.append(mentor(chunk));
   }
 
   function drawEquation(stage, body) {
@@ -184,12 +232,9 @@ export function mountLesson(container, { def, profile, glossary, formulas, onExi
   function drawExample(stage, body) {
     const list = el('ol', { class: 'steps', 'data-testid': 'example-steps' });
     let shown = 1;
-    const more = btn('Next step', 'example-more', () => {
-      shown += 1;
-      paint();
-    });
+    const more = btn('Next step', 'example-more', () => { shown += 1; paint(); });
     function paint() {
-      list.replaceChildren(...stage.steps.slice(0, shown).map((s) => el('li', {}, s)));
+      list.replaceChildren(...stage.steps.slice(0, shown).map((s) => richText('li', s, glossary, showTerm)));
       more.hidden = shown >= stage.steps.length;
     }
     body.append(list, more);
@@ -197,45 +242,61 @@ export function mountLesson(container, { def, profile, glossary, formulas, onExi
   }
 
   function drawQuestions(stage, body) {
-    stage.questions.forEach((q, qi) => {
+    stage.questions.forEach((raw, qi) => {
+      const key = `${sessionSeed}:${index}:${qi}`;
+      const q = instantiate(raw, hashSeed(sessionSeed, replays, index, qi));
       const box = el('div', { class: 'question', 'data-testid': `q-${qi}` });
       box.append(richText('p', q.prompt, glossary, showTerm));
       const input = el('input', { inputmode: 'decimal', autocomplete: 'off', 'aria-label': 'Your answer', 'data-testid': `answer-${qi}` });
       const fb = el('p', { class: 'feedback', role: 'status', 'data-testid': `feedback-${qi}` });
       const hintBox = el('p', { class: 'muted', 'data-testid': `hint-${qi}` });
-      let tries = 0;
+      let wrongTries = 0;
       let hints = 0;
+      let finished = false;
+      const finish = (revealed) => {
+        finished = true;
+        box.dataset.done = 'true';
+        if (!answered.has(key)) {
+          answered.add(key);
+          recordOutcome(outcomeFor({ wrongTries, hints, revealed }));
+        }
+        updateNext();
+      };
       const row = el('div', { class: 'row' });
+      const reveal = btn('Show me the answer', `reveal-${qi}`, () => {
+        fb.textContent = `${q.explain} (Answer: ${fmt(q.answer)}${q.unit ? ` ${q.unit}` : ''})`;
+        fb.dataset.state = 'shown';
+        finish(true);
+      });
+      reveal.hidden = true;
       row.append(
         btn('Check', `check-${qi}`, () => {
           const r = checkAnswer(q, input.value);
-          if (r.understood) tries += 1;
+          if (r.understood && !r.correct) wrongTries += 1;
           fb.textContent = (r.correct ? 'Yes! ' : '') + r.text;
           fb.dataset.state = r.correct ? 'right' : 'wrong';
-          if (r.correct) box.dataset.done = 'true';
-          showAnswerBtn.hidden = r.correct || tries < 2;
-          if (r.correct) stage._solved = (stage._solved ?? new Set()).add(qi);
-          updateNext();
+          if (r.correct && !finished) finish(false);
+          reveal.hidden = r.correct || wrongTries < 2;
         }, ''),
         btn('Give me a hint', `hint-btn-${qi}`, () => {
           hintBox.textContent = q.hints[Math.min(hints, q.hints.length - 1)];
           hints += 1;
         }),
+        reveal,
       );
-      const showAnswerBtn = btn('Show me the answer', `reveal-${qi}`, () => {
-        fb.textContent = q.explain;
-        fb.dataset.state = 'shown';
-        box.dataset.done = 'true';
-        updateNext();
-      });
-      showAnswerBtn.hidden = true;
-      row.append(showAnswerBtn);
       box.append(input, row, fb, hintBox);
       body.append(box);
     });
   }
 
-  function drawMission(stage, body) {
+  function drawPython(stage, body) {
+    body.append(mentor(stage.task));
+    body.append(el('pre', { class: 'code', 'data-testid': 'python-starter' }, stage.starter));
+    body.append(el('p', { class: 'muted', 'data-testid': 'python-soon' }, 'The Python lab switches on in the next update. For now, read the code and say what you think it will print. You can carry on.'));
+  }
+
+  function drawMission(stageIn, body) {
+    const stage = pickScenario(stageIn, replays + index);
     const tiers = Object.keys(stage.tiers);
     const tier = stage.tiers[missionTier] ?? stage.tiers.standard;
     const goal = tier.goal ?? stage.goal;
@@ -248,6 +309,7 @@ export function mountLesson(container, { def, profile, glossary, formulas, onExi
         if (t === missionTier) return;
         missionTier = t;
         attempts = 0;
+        missionHints = 0;
         render();
       });
       chips.append(chip);
@@ -257,10 +319,10 @@ export function mountLesson(container, { def, profile, glossary, formulas, onExi
     const status = el('p', { class: 'ws-status', role: 'status', 'data-testid': 'mission-status' });
     const offer = el('div', { class: 'row', 'data-testid': 'tier-offer' });
     const hintBox = el('p', { class: 'muted', 'data-testid': 'mission-hint' });
-    let hints = 0;
 
-    const board = startBoard(tier.start);
+    const board = boardFromSpec(tier.start, { battery: stage.battery });
     let latest = board;
+    const mkey = `${sessionSeed}:${index}:mission:${missionTier}`;
 
     function judge(manual) {
       const r = checkGoal(goal, latest);
@@ -271,9 +333,13 @@ export function mountLesson(container, { def, profile, glossary, formulas, onExi
         finishedTier = finishedTier === 'stretch' || missionTier === 'stretch' ? 'stretch' : missionTier;
         status.dataset.tone = 'good';
         status.textContent = 'Mission complete! The launch pad is lit.';
+        if (!answered.has(mkey)) {
+          answered.add(mkey);
+          recordOutcome(missionTier === 'training' ? 'ok' : outcomeFor({ wrongTries: attempts, hints: missionHints, revealed: false }));
+        }
         const o = tierOffer({ tier: missionTier, attempts, passed: true, hasStretch: !!stage.tiers.stretch, hasTraining: !!stage.tiers.training });
         if (first && o === 'stretch') {
-          offer.append(el('span', { class: 'muted' }, 'That was quick. Fancy a bonus?'), btn('Try the Stretch', 'offer-stretch', () => { missionTier = 'stretch'; attempts = 0; render(); }, ''));
+          offer.append(el('span', { class: 'muted' }, 'That was quick. Fancy a bonus?'), btn('Try the Stretch', 'offer-stretch', () => { missionTier = 'stretch'; attempts = 0; missionHints = 0; render(); }, ''));
         }
       } else {
         status.dataset.tone = '';
@@ -282,7 +348,11 @@ export function mountLesson(container, { def, profile, glossary, formulas, onExi
           attempts += 1;
           const o = tierOffer({ tier: missionTier, attempts, passed: false, hasStretch: false, hasTraining: !!stage.tiers.training });
           if (o === 'training') {
-            offer.append(el('span', { class: 'muted' }, 'Want a gentler version with the parts already on the board?'), btn('Try Training', 'offer-training', () => { missionTier = 'training'; attempts = 0; render(); }, ''));
+            if (!answered.has(`${mkey}:struggle`)) {
+              answered.add(`${mkey}:struggle`);
+              recordOutcome('struggle');
+            }
+            offer.append(el('span', { class: 'muted' }, 'Want a gentler version with the parts already on the board?'), btn('Try Training', 'offer-training', () => { missionTier = 'training'; attempts = 0; missionHints = 0; render(); }, ''));
           }
         }
       }
@@ -294,8 +364,8 @@ export function mountLesson(container, { def, profile, glossary, formulas, onExi
     actions.append(
       btn('Check my circuit', 'mission-check', () => judge(true), ''),
       btn('Give me a hint', 'mission-hint-btn', () => {
-        hintBox.textContent = stage.hints[Math.min(hints, stage.hints.length - 1)];
-        hints += 1;
+        hintBox.textContent = stage.hints[Math.min(missionHints, stage.hints.length - 1)];
+        missionHints += 1;
       }),
     );
     body.append(status, actions, hintBox, offer);
@@ -307,15 +377,15 @@ export function mountLesson(container, { def, profile, glossary, formulas, onExi
       profile: { level, workshop: board },
       embedded: true,
       allowedParts: stage.parts,
+      partDefaults: stage.battery !== undefined ? { battery: { voltage: stage.battery } } : null,
       onSave: (b) => { latest = b; judge(false); },
       onExit: () => {},
-      onLevelChange: (l) => { level = l; onLevelChange(l); },
+      onLevelChange: (l) => setLevelNow(l),
     });
   }
 
   // ---- shell
 
-  let nextBtn;
   function updateNext() {
     if (!nextBtn) return;
     const stage = def.stages[index];
@@ -330,18 +400,22 @@ export function mountLesson(container, { def, profile, glossary, formulas, onExi
   }
 
   function render() {
-    const raw = def.stages[index];
-    const stage = resolveStage(raw, level);
+    const stage = resolveStage(def.stages[index], level);
     root.replaceChildren(...header(stage));
-    if (helpOpen) root.append(helpPanel(stage));
+    noteSlot = el('div');
+    helpSlot = el('div');
+    termSlot = el('div');
+    root.append(noteSlot, helpSlot);
     const body = el('div', { class: 'lesson-body', 'data-testid': 'stage-body' });
     if (stage.type !== 'mission') stopWorkshop();
     root.append(body);
 
     nextBtn = btn('Next', 'lesson-next', advance, '');
     drawStage(stage, body);
-    const tb = termBox();
-    if (tb) body.append(tb);
+    body.append(termSlot);
+    termShown = null;
+    paintNote();
+    paintHelp();
 
     if (stage.fellBack.length) {
       const used = levelInfo(Math.min(...stage.fellBack)).name;
@@ -349,20 +423,29 @@ export function mountLesson(container, { def, profile, glossary, formulas, onExi
     }
 
     const nav = el('div', { class: 'row' });
-    if (index > 0) nav.append(btn('Back', 'lesson-back', () => { index -= 1; rung = 0; helpOpen = false; termShown = null; render(); }));
+    if (index > 0) nav.append(btn('Back', 'lesson-back', () => go(index - 1), 'secondary'));
     nav.append(nextBtn);
     root.append(nav);
     updateNext();
   }
 
+  function go(i) {
+    index = i;
+    rung = 0;
+    helpOpen = false;
+    termShown = null;
+    render();
+  }
+
   function advance() {
-    if (index < def.stages.length - 1) {
-      index += 1;
-      rung = 0;
-      helpOpen = false;
-      termShown = null;
-      render();
-    } else finish();
+    if (index >= def.stages.length - 1) return finish();
+    if (pendingLevel !== null) {
+      level = pendingLevel;
+      pendingLevel = null;
+      onLevelChange(level);
+    }
+    note = null;
+    go(index + 1);
   }
 
   function finish() {
@@ -371,18 +454,33 @@ export function mountLesson(container, { def, profile, glossary, formulas, onExi
     const done = el('div', { class: 'panel', 'data-testid': 'lesson-complete' });
     done.append(el('p', { class: 'eyebrow' }, def.title));
     if (missionDone) {
-      done.append(el('h1', {}, 'Mission complete.'), mentor(`Patch earned: ${def.title}. ${finishedTier === 'stretch' ? 'And a bonus star for the Stretch.' : 'Come back for the Stretch star any time.'}`));
+      done.append(el('h1', {}, 'Mission complete.'), mentor(`Patch earned: ${def.title}. ${finishedTier === 'stretch' ? 'And a bonus star for the Stretch.' : 'Come back for the Stretch star any time.'} Replay it for new numbers and a new challenge.`));
     } else {
       done.append(el('h1', {}, 'Nearly there.'), mentor('The mission is not finished yet. Come back whenever you like. Your progress is not lost.'));
     }
     const row = el('div', { class: 'row' });
-    row.append(btn('Back to base', 'lesson-done', onExit, ''), btn('Replay', 'lesson-replay', () => { index = 0; missionDone = false; finishedTier = null; attempts = 0; missionTier = 'standard'; container.replaceChildren(root); render(); }));
+    row.append(
+      btn('Back to base', 'lesson-done', onExit, ''),
+      btn('Replay with new numbers', 'lesson-replay', () => {
+        replays += 1;
+        sessionSeed = Math.floor(Math.random() * 2 ** 31);
+        index = 0;
+        missionDone = false;
+        finishedTier = null;
+        attempts = 0;
+        missionHints = 0;
+        missionTier = 'standard';
+        answered.clear();
+        container.replaceChildren(root);
+        render();
+      }),
+    );
     done.append(row);
     root.replaceChildren(done);
   }
 
   render();
-  return { unmount: stopWorkshop };
+  return { unmount: stopWorkshop, get seed() { return sessionSeed; } };
 }
 
 // ------------------------------------------------------------------ formula card + book + mission list

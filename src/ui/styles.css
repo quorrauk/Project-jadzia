@@ -381,3 +381,14 @@ body.wide #app { max-width: 1280px; }
 .lesson button:disabled { opacity: 0.45; cursor: not-allowed; }
 .glossary dt { margin-top: 10px; font-weight: 700; color: var(--glow); }
 .glossary dd { margin: 2px 0 0; }
+.toy-out { flex-basis: 100%; margin: 0; font-weight: 600; }
+.toy .slider { flex-basis: 100%; }
+.meter { flex-basis: 100%; height: 18px; background: #060a18; border: 1px solid var(--panel-edge); border-radius: 999px; overflow: hidden; }
+.meter-fill { height: 100%; width: 0; background: var(--glow); transition: width 0.15s; }
+.toy-bulb[data-state="pop"] { color: #ffb4b4; border-color: #ff6b6b; }
+.toy-bulb[data-state="lit"] { color: #04101f; background: var(--ok); border-color: var(--ok); }
+.note { padding: 10px 14px; background: var(--panel); border: 1px solid var(--warn); border-radius: 10px; }
+.note .row { margin-top: 8px; }
+.note button { margin-top: 0; }
+.autochip[aria-pressed="true"] { border-color: var(--ok); color: var(--ok); }
+pre.code { margin: 0; padding: 12px; overflow: auto; background: #060a18; border: 1px solid var(--panel-edge); border-radius: 8px; font-size: 1rem; }

@@ -108,6 +108,7 @@ function start(config, store, content) {
           store.updateProfile(p.id, { completed: recordFinish(p.completed ?? [], id, tier) });
         },
         onLevelChange: (level) => store.updateProfile(profile.id, { level }),
+        onAdaptiveChange: (adaptive) => store.updateProfile(profile.id, { adaptive }),
       });
     } catch (err) {
       app.replaceChildren(el('p', { class: 'error', 'data-testid': 'fatal' }, `Could not open mission: ${err.message}`));

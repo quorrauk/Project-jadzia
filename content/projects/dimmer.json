@@ -1,0 +1,960 @@
+{
+  "id": "dimmer",
+  "title": "Dimmer",
+  "arc": 1,
+  "stages": [
+    {
+      "type": "briefing",
+      "lines": [
+        "The lunar mice find the cockpit lights too bright. They keep sneezing.",
+        "Time to fit a dimmer, so Rover can set the glow just right."
+      ]
+    },
+    {
+      "type": "learn",
+      "toy": {
+        "kind": "dimmer",
+        "prompt": "Slide the dimmer and watch the brightness meter."
+      },
+      "chunks": {
+        "1": [
+          "A [[dimmer]] is a squeeze you can change. Slide it up and the bulb gets dimmer.",
+          "More squeeze means less flow. Less flow means a dimmer bulb.",
+          "It sits in the same loop as the bulb, one after the other. That is called [[series]]."
+        ],
+        "2": [
+          "A [[dimmer]] is a variable [[resistor]] in [[series]] with the bulb. The more [[resistance]] in the loop, the less [[current]].",
+          "The resistances of parts in series add up. The bulb and dimmer share the battery's push."
+        ],
+        "3": [
+          "A variable resistor in [[series]] with the bulb divides the supply. Total R = R_bulb + R_dimmer, and I = V ÷ R_total.",
+          "Bulb power is I² × R_bulb, so brightness drops quickly as the dimmer goes up."
+        ]
+      },
+      "help": {
+        "1": "Dimmer up means a bigger squeeze, so less flow.",
+        "2": "Think of a tap. Turn it down and less water comes out.",
+        "3": "Try the slider at 0, 20 and 100. Say what happens to the meter each time.",
+        "4": "Slide to 0, then slide to 100. At 0 the bulb is bright, at 100 it is almost out."
+      }
+    },
+    {
+      "type": "equation",
+      "formula": "series-resistance",
+      "intro": {
+        "1": "When parts are one after another, their squeeze adds up.",
+        "2": "In [[series]], the [[resistance]] adds. Into the Formula Book.",
+        "3": "R_total = R1 + R2 in series. Into the Formula Book."
+      }
+    },
+    {
+      "type": "example",
+      "title": "Worked example",
+      "steps": {
+        "1": [
+          "A bulb squeezes with 20 Ω. The dimmer is set to 30 Ω.",
+          "In a line, squeezes add: 20 + 30 = 50 Ω.",
+          "The battery is 6 V. Flow = 6 ÷ 50.",
+          "Flow = 0.12 A. A gentle glow."
+        ],
+        "3": [
+          "R_total = 20 + 30 = 50 Ω.",
+          "I = V ÷ R_total = 6 ÷ 50.",
+          "I = 0.12 A = 120 mA.",
+          "Bulb power = I² × 20 = 0.288 W, about 29% of full brightness."
+        ]
+      }
+    },
+    {
+      "type": "try",
+      "title": "Try one",
+      "questions": [
+        {
+          "prompt": {
+            "1": "The bulb has 20 Ω and the dimmer is set to {Rd} Ω. What is the total squeeze, in ohms?",
+            "2": "The bulb has 20 Ω and the dimmer is set to {Rd} Ω. What is the total squeeze, in ohms?",
+            "3": "A {V} V battery feeds a 20 Ω bulb in series with a dimmer set to {Rd} Ω. What current flows, in mA?"
+          },
+          "unit": {
+            "1": "Ω",
+            "2": "Ω",
+            "3": "mA"
+          },
+          "gen": {
+            "1": {
+              "vars": {
+                "Rd": {
+                  "pick": [
+                    10,
+                    20,
+                    30,
+                    40
+                  ]
+                }
+              },
+              "answer": "20 + Rd"
+            },
+            "2": {
+              "vars": {
+                "Rd": {
+                  "pick": [
+                    15,
+                    25,
+                    35,
+                    45,
+                    60,
+                    80
+                  ]
+                }
+              },
+              "answer": "20 + Rd"
+            },
+            "3": {
+              "vars": {
+                "V": {
+                  "pick": [
+                    4.5,
+                    6,
+                    9
+                  ]
+                },
+                "Rd": {
+                  "pick": [
+                    10,
+                    20,
+                    30,
+                    40,
+                    60,
+                    80
+                  ]
+                }
+              },
+              "answer": "V / R * 1000",
+              "derived": {
+                "R": "20 + Rd"
+              },
+              "dp": 1
+            }
+          },
+          "explain": {
+            "1": "In series the squeezes add: 20 + {Rd} = {answer} Ω.",
+            "2": "In series the squeezes add: 20 + {Rd} = {answer} Ω.",
+            "3": "R_total = 20 + {Rd} = {R} Ω. I = {V} ÷ {R} = {answer} mA (after × 1000)."
+          },
+          "wrong": [
+            {
+              "expr": "20 * Rd",
+              "why": "In series you add, not multiply: 20 + {Rd}."
+            }
+          ],
+          "hints": [
+            "Parts one after another: add the squeezes.",
+            "Bulb 20 Ω plus dimmer {Rd} Ω.",
+            "20 + {Rd}."
+          ]
+        }
+      ],
+      "help": {
+        "1": "Add the two squeezes together.",
+        "2": "Two hurdles in a row: you have to clear both. Total height is the sum.",
+        "3": "Example: 20 Ω + 30 Ω = 50 Ω.",
+        "4": "Watch: 20 + {Rd}. Type that number in."
+      }
+    },
+    {
+      "type": "mission",
+      "title": "Dim the cockpit",
+      "parts": [
+        "battery",
+        "switch",
+        "bulb",
+        "variable_resistor"
+      ],
+      "goal": {
+        "all": [
+          {
+            "type": "brightness",
+            "part": "bulb",
+            "min": 0.15,
+            "max": 0.5
+          },
+          {
+            "type": "no-burnt"
+          }
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "cockpit",
+          "battery": 4.5,
+          "story": "The cockpit lamp is blinding the mice. Dim it to a cosy glow. Battery: 4.5 V.",
+          "solution": {
+            "build": [
+              {
+                "type": "battery",
+                "x": 3,
+                "y": 2,
+                "rot": 1
+              },
+              {
+                "type": "switch",
+                "x": 6,
+                "y": 2,
+                "params": {
+                  "closed": true
+                }
+              },
+              {
+                "type": "variable_resistor",
+                "x": 11,
+                "y": 2,
+                "params": {
+                  "resistance": 20
+                }
+              },
+              {
+                "type": "bulb",
+                "x": 21,
+                "y": 2,
+                "rot": 1
+              }
+            ],
+            "wires": [
+              [
+                "B1.a",
+                "SW1.a"
+              ],
+              [
+                "SW1.b",
+                "VR1.a"
+              ],
+              [
+                "VR1.b",
+                "BULB1.a"
+              ],
+              [
+                "BULB1.b",
+                "B1.b"
+              ]
+            ]
+          },
+          "tiers": {
+            "training": {
+              "start": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "variable_resistor",
+                    "x": 11,
+                    "y": 2,
+                    "params": {
+                      "resistance": 500
+                    }
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 21,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "VR1.a"
+                  ],
+                  [
+                    "VR1.b",
+                    "BULB1.a"
+                  ],
+                  [
+                    "BULB1.b",
+                    "B1.b"
+                  ]
+                ]
+              }
+            },
+            "stretch": {
+              "solution": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "variable_resistor",
+                    "x": 11,
+                    "y": 2,
+                    "params": {
+                      "resistance": 20
+                    }
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 21,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "VR1.a"
+                  ],
+                  [
+                    "VR1.b",
+                    "BULB1.a"
+                  ],
+                  [
+                    "BULB1.b",
+                    "B1.b"
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "sleep-pod",
+          "battery": 6,
+          "story": "Bedtime in the sleep pod. Dim the lamp, but not to nothing. Battery: 6 V.",
+          "solution": {
+            "build": [
+              {
+                "type": "battery",
+                "x": 3,
+                "y": 2,
+                "rot": 1
+              },
+              {
+                "type": "switch",
+                "x": 6,
+                "y": 2,
+                "params": {
+                  "closed": true
+                }
+              },
+              {
+                "type": "variable_resistor",
+                "x": 11,
+                "y": 2,
+                "params": {
+                  "resistance": 30
+                }
+              },
+              {
+                "type": "bulb",
+                "x": 21,
+                "y": 2,
+                "rot": 1
+              }
+            ],
+            "wires": [
+              [
+                "B1.a",
+                "SW1.a"
+              ],
+              [
+                "SW1.b",
+                "VR1.a"
+              ],
+              [
+                "VR1.b",
+                "BULB1.a"
+              ],
+              [
+                "BULB1.b",
+                "B1.b"
+              ]
+            ]
+          },
+          "tiers": {
+            "training": {
+              "start": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "variable_resistor",
+                    "x": 11,
+                    "y": 2,
+                    "params": {
+                      "resistance": 500
+                    }
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 21,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "VR1.a"
+                  ],
+                  [
+                    "VR1.b",
+                    "BULB1.a"
+                  ],
+                  [
+                    "BULB1.b",
+                    "B1.b"
+                  ]
+                ]
+              }
+            },
+            "stretch": {
+              "solution": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "variable_resistor",
+                    "x": 11,
+                    "y": 2,
+                    "params": {
+                      "resistance": 30
+                    }
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 21,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "VR1.a"
+                  ],
+                  [
+                    "VR1.b",
+                    "BULB1.a"
+                  ],
+                  [
+                    "BULB1.b",
+                    "B1.b"
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "mouse-disco",
+          "battery": 9,
+          "story": "A 9 V battery, a bulb and a dimmer. Careful: the dimmer at zero would pop the bulb.",
+          "solution": {
+            "build": [
+              {
+                "type": "battery",
+                "x": 3,
+                "y": 2,
+                "rot": 1
+              },
+              {
+                "type": "switch",
+                "x": 6,
+                "y": 2,
+                "params": {
+                  "closed": true
+                }
+              },
+              {
+                "type": "variable_resistor",
+                "x": 11,
+                "y": 2,
+                "params": {
+                  "resistance": 60
+                }
+              },
+              {
+                "type": "bulb",
+                "x": 21,
+                "y": 2,
+                "rot": 1
+              }
+            ],
+            "wires": [
+              [
+                "B1.a",
+                "SW1.a"
+              ],
+              [
+                "SW1.b",
+                "VR1.a"
+              ],
+              [
+                "VR1.b",
+                "BULB1.a"
+              ],
+              [
+                "BULB1.b",
+                "B1.b"
+              ]
+            ]
+          },
+          "tiers": {
+            "training": {
+              "start": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "variable_resistor",
+                    "x": 11,
+                    "y": 2,
+                    "params": {
+                      "resistance": 500
+                    }
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 21,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "VR1.a"
+                  ],
+                  [
+                    "VR1.b",
+                    "BULB1.a"
+                  ],
+                  [
+                    "BULB1.b",
+                    "B1.b"
+                  ]
+                ]
+              }
+            },
+            "stretch": {
+              "solution": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "variable_resistor",
+                    "x": 11,
+                    "y": 2,
+                    "params": {
+                      "resistance": 60
+                    }
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 21,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "VR1.a"
+                  ],
+                  [
+                    "VR1.b",
+                    "BULB1.a"
+                  ],
+                  [
+                    "BULB1.b",
+                    "B1.b"
+                  ]
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "tiers": {
+        "training": {
+          "text": "Training: the loop is built, the dimmer is at 500 Ω. Slide it until the bulb glows softly."
+        },
+        "standard": {
+          "text": "Build a loop with a battery, switch, bulb and dimmer. Make the bulb glow between 15% and 50% brightness.",
+          "start": "empty"
+        },
+        "stretch": {
+          "text": "Stretch: tighter target. Brightness between 20% and 30%.",
+          "start": "empty",
+          "goal": {
+            "all": [
+              {
+                "type": "brightness",
+                "part": "bulb",
+                "min": 0.2,
+                "max": 0.3
+              },
+              {
+                "type": "no-burnt"
+              }
+            ]
+          }
+        }
+      },
+      "hints": [
+        "The dimmer goes in the same loop as the bulb, one after the other.",
+        "Select the dimmer and slide it. Watch the bulb brightness in the readout.",
+        "Try about 20 Ω for 4.5 V, 30 Ω for 6 V and 60 Ω for 9 V. Then nudge it."
+      ],
+      "help": {
+        "1": "Put the dimmer in the loop, then slide it.",
+        "2": "The dimmer is just a squeeze you can turn up or down.",
+        "3": "Example: battery → switch → dimmer → bulb → battery. Slide the dimmer to dim the bulb.",
+        "4": "Switch to Training and slide the dimmer. See how the bulb changes."
+      }
+    },
+    {
+      "type": "debrief",
+      "lines": [
+        "The dimmer added squeeze, so less flow reached the bulb.",
+        "Bulb brightness drops much faster than the flow does. That is why the bulb died so quickly near 100 Ω.",
+        "Next: more than one bulb. Series or parallel?"
+      ]
+    },
+    {
+      "type": "python",
+      "title": "Do the sums",
+      "task": "Let Python work out the squeeze for you. Find the resistance that gives the flow you want.",
+      "starter": "# R = V / I\nvoltage = 9\ncurrent = 0.02\nresistance = voltage / current\nprint(resistance)\n",
+      "expect": [
+        {
+          "kind": "code-contains",
+          "text": "/"
+        },
+        {
+          "kind": "any-output"
+        }
+      ],
+      "hints": [
+        "Change current to 0.05 and run it. What happens to the resistance?",
+        "The / sign means divide."
+      ],
+      "help": {
+        "1": "Python does maths. / means divide.",
+        "2": "It is a calculator that you can save.",
+        "3": "Change the numbers at the top. The answer updates.",
+        "4": "Copy the starter. Run it. Then change voltage and run again."
+      }
+    },
+    {
+      "type": "maths",
+      "title": "Maths check",
+      "questions": [
+        {
+          "prompt": {
+            "1": "You want {I} A to flow from a {V} V battery. What total squeeze does the loop need, in ohms?",
+            "2": "You want {I} A to flow from a {V} V battery. What total squeeze does the loop need, in ohms?",
+            "3": "You want {I} mA to flow from a {V} V battery. What total resistance does the loop need, in ohms?"
+          },
+          "unit": "Ω",
+          "gen": {
+            "1": {
+              "vars": {
+                "V": {
+                  "pick": [
+                    6,
+                    9,
+                    12
+                  ]
+                },
+                "I": {
+                  "pick": [
+                    0.1,
+                    0.15,
+                    0.2,
+                    0.3
+                  ]
+                }
+              },
+              "answer": "V / I",
+              "where": [
+                "V / I == round(V / I)"
+              ]
+            },
+            "2": {
+              "vars": {
+                "V": {
+                  "pick": [
+                    6,
+                    9,
+                    12
+                  ]
+                },
+                "I": {
+                  "pick": [
+                    0.1,
+                    0.15,
+                    0.2,
+                    0.25
+                  ]
+                }
+              },
+              "answer": "V / I",
+              "dp": 1
+            },
+            "3": {
+              "vars": {
+                "V": {
+                  "pick": [
+                    6,
+                    9,
+                    12
+                  ]
+                },
+                "I": {
+                  "pick": [
+                    100,
+                    150,
+                    200,
+                    300
+                  ]
+                }
+              },
+              "answer": "V / (I / 1000)",
+              "dp": 1
+            }
+          },
+          "explain": "R_total = V ÷ I = {answer} Ω.",
+          "wrong": [
+            {
+              "expr": "V * I",
+              "why": "Rearrange V = I × R to R = V ÷ I. Divide, do not multiply."
+            }
+          ],
+          "hints": [
+            "Rearrange V = I × R to get R.",
+            "R = V ÷ I.",
+            "{V} divided by the flow."
+          ]
+        },
+        {
+          "prompt": {
+            "1": "The loop needs {I} A from a {V} V battery. The bulb is 20 Ω. What dimmer setting do you need, in ohms?",
+            "2": "The loop needs {I} A from a {V} V battery. The bulb is 20 Ω. What dimmer setting do you need, in ohms?",
+            "3": "The loop needs {I} mA from a {V} V battery. The bulb is 20 Ω. What dimmer setting, in ohms?"
+          },
+          "unit": "Ω",
+          "gen": {
+            "1": {
+              "vars": {
+                "V": {
+                  "pick": [
+                    6,
+                    9,
+                    12
+                  ]
+                },
+                "I": {
+                  "pick": [
+                    0.1,
+                    0.15,
+                    0.2,
+                    0.3
+                  ]
+                }
+              },
+              "answer": "V / I - 20",
+              "where": [
+                "V / I == round(V / I)",
+                "V / I > 20"
+              ]
+            },
+            "2": {
+              "vars": {
+                "V": {
+                  "pick": [
+                    6,
+                    9,
+                    12
+                  ]
+                },
+                "I": {
+                  "pick": [
+                    0.1,
+                    0.15,
+                    0.2,
+                    0.25
+                  ]
+                }
+              },
+              "answer": "V / I - 20",
+              "where": [
+                "V / I > 20"
+              ],
+              "dp": 1
+            },
+            "3": {
+              "vars": {
+                "V": {
+                  "pick": [
+                    6,
+                    9,
+                    12
+                  ]
+                },
+                "I": {
+                  "pick": [
+                    100,
+                    150,
+                    200,
+                    300
+                  ]
+                }
+              },
+              "answer": "V / (I / 1000) - 20",
+              "where": [
+                "V / (I / 1000) > 20"
+              ],
+              "dp": 1
+            }
+          },
+          "explain": "Total needed = V ÷ I. The bulb takes 20 Ω of it, so the dimmer is the rest: {answer} Ω.",
+          "wrong": [
+            {
+              "expr": "V / I",
+              "why": "That is the total squeeze. The bulb already supplies 20 Ω of it, so take 20 off."
+            }
+          ],
+          "hints": [
+            "First find the total squeeze: R_total = V ÷ I.",
+            "The bulb is 20 Ω of that total. The dimmer must be the rest.",
+            "Subtract 20 from your total."
+          ]
+        },
+        {
+          "prompt": "A dimmer says {k} kΩ. How many ohms is that?",
+          "unit": "Ω",
+          "gen": {
+            "vars": {
+              "k": {
+                "pick": [
+                  0.2,
+                  0.5,
+                  1,
+                  2.5,
+                  4.7
+                ]
+              }
+            },
+            "answer": "k * 1000"
+          },
+          "explain": "1 kΩ = 1000 Ω, so {k} kΩ = {answer} Ω.",
+          "wrong": [
+            {
+              "expr": "k / 1000",
+              "why": "k means thousand, so the number of ohms is bigger. Multiply by 1000."
+            }
+          ],
+          "hints": [
+            "k means thousand.",
+            "Multiply by 1000.",
+            "{k} × 1000."
+          ]
+        }
+      ]
+    }
+  ]
+}

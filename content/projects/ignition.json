@@ -12,8 +12,10 @@
     },
     {
       "type": "learn",
-      "toy": "bulb-switch",
-      "toyPrompt": "Tap the switch. Watch the bulb.",
+      "toy": {
+        "kind": "bulb-switch",
+        "prompt": "Tap the switch. Watch the bulb."
+      },
       "chunks": {
         "1": [
           "You just closed a gap. That let electricity run round a loop, and the bulb lit up.",
@@ -32,8 +34,8 @@
       "help": {
         "1": "Think of a bike chain. If the chain is joined into a loop, the wheel turns. If there is a gap, nothing moves. A circuit is the chain.",
         "2": "Picture a toy train track. The train only runs if the track is a full loop. Electricity is the train.",
-        "3": "Try it yourself: tap the switch on, then off, and say out loud what changed. Closed switch, full loop, bulb on.",
-        "4": "Watch: switch off, loop has a gap, bulb dark. Switch on, loop is complete, bulb glows. Now you do the opposite: make it dark again."
+        "3": "Tap the switch on, then off, and say out loud what changed. Closed switch, full loop, bulb on.",
+        "4": "Watch: switch off, loop has a gap, bulb dark. Switch on, loop is complete, bulb glows. Now you make it dark again."
       }
     },
     {
@@ -68,42 +70,300 @@
       "title": "Try one",
       "questions": [
         {
-          "prompt": "A 9 V battery pushes electricity through a 3 Ω part. How many amps flow?",
-          "unit": "A",
-          "answer": 3,
-          "explain": "I = V ÷ R = 9 ÷ 3 = 3 A.",
-          "wrong": [{ "value": 27, "why": "That is 9 × 3. We want to divide: flow = push ÷ squeeze, so 9 ÷ 3." }],
-          "hints": ["Which rule gives flow? Look in your Formula Book.", "I = V ÷ R. What are V and R here?", "V is 9 and R is 3. So I = 9 ÷ 3."]
+          "prompt": {
+            "1": "A {V} V battery pushes electricity through a part with a squeeze of {R} Ω. How many amps flow?",
+            "2": "A {V} V battery pushes electricity through a part with a squeeze of {R} Ω. How many amps flow?",
+            "3": "A {V} V battery drives current through a {R} Ω part. Find the current in milliamps (mA)."
+          },
+          "unit": {
+            "1": "A",
+            "2": "A",
+            "3": "mA"
+          },
+          "gen": {
+            "1": {
+              "vars": {
+                "V": {
+                  "pick": [
+                    6,
+                    8,
+                    9,
+                    10,
+                    12
+                  ]
+                },
+                "R": {
+                  "pick": [
+                    2,
+                    3,
+                    4,
+                    5
+                  ]
+                }
+              },
+              "answer": "V / R",
+              "where": [
+                "V / R == round(V / R)"
+              ]
+            },
+            "2": {
+              "vars": {
+                "V": {
+                  "pick": [
+                    3,
+                    4.5,
+                    6,
+                    9,
+                    12
+                  ]
+                },
+                "R": {
+                  "pick": [
+                    10,
+                    20,
+                    30,
+                    50,
+                    100
+                  ]
+                }
+              },
+              "answer": "V / R",
+              "dp": 3
+            },
+            "3": {
+              "vars": {
+                "V": {
+                  "pick": [
+                    3,
+                    4.5,
+                    6,
+                    9,
+                    12
+                  ]
+                },
+                "R": {
+                  "pick": [
+                    10,
+                    20,
+                    30,
+                    50,
+                    100
+                  ]
+                }
+              },
+              "answer": "V / R * 1000",
+              "derived": {
+                "A": "V / R"
+              },
+              "dp": 1
+            }
+          },
+          "explain": {
+            "1": "I = V ÷ R = {V} ÷ {R} = {answer} A.",
+            "2": "I = V ÷ R = {V} ÷ {R} = {answer} A.",
+            "3": "I = V ÷ R = {V} ÷ {R} = {A} A, which is {answer} mA."
+          },
+          "wrong": [
+            {
+              "expr": "V * R",
+              "why": "That is {V} × {R}. Flow is push ÷ squeeze, so divide."
+            }
+          ],
+          "hints": [
+            "Which rule gives flow? Look in your Formula Book.",
+            "I = V ÷ R. What are V and R here?",
+            "V is {V} and R is {R}. So I = {V} ÷ {R}."
+          ]
         }
       ],
       "help": {
-        "1": "Flow is push divided by squeeze. Push is 9. Squeeze is 3.",
-        "2": "Share 9 sweets between 3 friends. Each gets the same number. That number is the answer.",
-        "3": "Same idea, different numbers: 8 V and 2 Ω gives 8 ÷ 2 = 4 A. Now do 9 ÷ 3.",
-        "4": "Watch: I = V ÷ R, so I = 9 ÷ 3 = 3 A. Now try 6 V through 3 Ω."
+        "1": "Flow is push divided by squeeze.",
+        "2": "Share the push between the squeeze: like sharing sweets between friends.",
+        "3": "Same idea, different numbers: 8 V and 2 Ω gives 8 ÷ 2 = 4 A. Now do yours.",
+        "4": "Watch: I = V ÷ R. Put your two numbers in, divide, add the unit. Then try again."
       }
     },
     {
       "type": "mission",
       "title": "Light the launch pad",
-      "story": "The pad lights are dead. Build a circuit that makes the bulb glow.",
-      "parts": ["battery", "bulb", "switch"],
-      "goal": { "type": "lit", "part": "bulb", "min": 1 },
+      "parts": [
+        "battery",
+        "bulb",
+        "switch"
+      ],
+      "goal": {
+        "type": "lit",
+        "part": "bulb",
+        "min": 1
+      },
+      "solution": {
+        "build": [
+          {
+            "type": "battery",
+            "x": 3,
+            "y": 2,
+            "rot": 1
+          },
+          {
+            "type": "switch",
+            "x": 6,
+            "y": 2,
+            "params": {
+              "closed": true
+            }
+          },
+          {
+            "type": "bulb",
+            "x": 21,
+            "y": 2,
+            "rot": 1
+          }
+        ],
+        "wires": [
+          [
+            "B1.a",
+            "SW1.a"
+          ],
+          [
+            "SW1.b",
+            "BULB1.a"
+          ],
+          [
+            "BULB1.b",
+            "B1.b"
+          ]
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "pad",
+          "battery": 4.5,
+          "story": "The pad lights are dead. Build a circuit that makes the bulb glow."
+        },
+        {
+          "id": "cockpit",
+          "battery": 6,
+          "story": "The cockpit lamp is out and a lunar mouse is chewing the manual. Get the lamp glowing."
+        },
+        {
+          "id": "airlock",
+          "battery": 4.5,
+          "story": "The airlock light has gone dark. Fix it before the mice find the snacks."
+        }
+      ],
       "tiers": {
-        "training": { "text": "Training: the parts are already on the board. Close the switch to finish the loop.", "start": "starter" },
-        "standard": { "text": "Build it from nothing: a battery, a switch and a bulb in one full loop, and get the bulb glowing.", "start": "empty" },
-        "stretch": { "text": "Stretch: now light two bulbs at once. Same battery.", "start": "empty", "goal": { "type": "lit", "part": "bulb", "min": 2 } }
+        "training": {
+          "text": "Training: the parts are already on the board. Close the switch to finish the loop.",
+          "start": {
+            "build": [
+              {
+                "type": "battery",
+                "x": 3,
+                "y": 2,
+                "rot": 1
+              },
+              {
+                "type": "switch",
+                "x": 6,
+                "y": 2,
+                "params": {
+                  "closed": false
+                }
+              },
+              {
+                "type": "bulb",
+                "x": 21,
+                "y": 2,
+                "rot": 1
+              }
+            ],
+            "wires": [
+              [
+                "B1.a",
+                "SW1.a"
+              ],
+              [
+                "SW1.b",
+                "BULB1.a"
+              ],
+              [
+                "BULB1.b",
+                "B1.b"
+              ]
+            ]
+          }
+        },
+        "standard": {
+          "text": "Build it from nothing: a battery, a switch and a bulb in one full loop, and get the bulb glowing.",
+          "start": "empty"
+        },
+        "stretch": {
+          "text": "Stretch: now light two bulbs at once. Same battery.",
+          "start": "empty",
+          "goal": {
+            "type": "lit",
+            "part": "bulb",
+            "min": 2
+          },
+          "solution": {
+            "build": [
+              {
+                "type": "battery",
+                "x": 3,
+                "y": 2,
+                "rot": 1
+              },
+              {
+                "type": "switch",
+                "x": 6,
+                "y": 2,
+                "params": {
+                  "closed": true
+                }
+              },
+              {
+                "type": "bulb",
+                "x": 11,
+                "y": 2
+              },
+              {
+                "type": "bulb",
+                "x": 21,
+                "y": 2,
+                "rot": 1
+              }
+            ],
+            "wires": [
+              [
+                "B1.a",
+                "SW1.a"
+              ],
+              [
+                "SW1.b",
+                "BULB1.a"
+              ],
+              [
+                "BULB1.b",
+                "BULB2.a"
+              ],
+              [
+                "BULB2.b",
+                "B1.b"
+              ]
+            ]
+          }
+        }
       },
       "hints": [
         "Electricity needs a full circle. Is there a gap?",
         "Tap the + dot on the battery, then a dot on the switch. Keep joining parts until you are back at the battery's − dot.",
-        "Battery + to the switch, switch to the bulb, bulb back to the battery −. Then close the switch."
+        "Battery + to the switch, switch to the bulb, bulb back to the battery −. Then tap the switch to close it."
       ],
       "help": {
-        "1": "A circuit is a loop. Join the parts in a ring, battery to switch to bulb and back to the battery.",
+        "1": "A circuit is a loop. Join the parts in a ring: battery, switch, bulb, and back to the battery.",
         "2": "Make a ring like a necklace. Every part is a bead and the wires are the string.",
         "3": "Example: battery + → switch → bulb → battery −. Then tap the switch to close it.",
-        "4": "Tap 'Load a starter circuit' and I will have it built for you. Close the switch, then clear the board and build your own."
+        "4": "Switch to Training. The parts are already there, so all you do is close the switch. Then come back and build your own."
       }
     },
     {
@@ -115,24 +375,244 @@
       ]
     },
     {
+      "type": "python",
+      "title": "Say hello",
+      "task": "Your first line of code. print() makes the computer say something. Change the message to greet Mission Control, then run it.",
+      "starter": "# Change the message, then run it\nprint(\"Hello, Mission Control\")\n",
+      "expect": [
+        {
+          "kind": "code-contains",
+          "text": "print("
+        },
+        {
+          "kind": "any-output"
+        }
+      ],
+      "hints": [
+        "The words go inside the brackets, between quote marks.",
+        "Quote marks must match: \"like this\"."
+      ],
+      "help": {
+        "1": "print() shows words on the screen.",
+        "2": "It is like the robot's voice. Whatever is in the quotes, it says.",
+        "3": "print(\"Hi\") says Hi. Try print(\"Rover online\").",
+        "4": "Copy the starter code and run it. Then change the words."
+      }
+    },
+    {
       "type": "maths",
       "title": "Maths check",
       "questions": [
         {
-          "prompt": "Your bulb has 20 Ω of squeeze and the battery pushes 4.5 V. How many amps flow? Give your answer to 3 decimal places, for example 0.123.",
-          "unit": "A",
-          "answer": 0.225,
-          "tolerance": 0.03,
-          "explain": "I = V ÷ R = 4.5 ÷ 20 = 0.225 A (225 mA).",
-          "hints": ["Use I = V ÷ R.", "V = 4.5 and R = 20.", "4.5 ÷ 20 = 0.225."]
+          "prompt": {
+            "1": "A part carries {I} A of flow from a {V} V battery. What is its squeeze (resistance) in ohms?",
+            "2": "A part carries {I} A of flow from a {V} V battery. What is its squeeze (resistance) in ohms?",
+            "3": "A part carries {I} mA from a {V} V battery. Find its resistance in ohms."
+          },
+          "unit": "Ω",
+          "gen": {
+            "1": {
+              "vars": {
+                "V": {
+                  "pick": [
+                    6,
+                    9,
+                    12
+                  ]
+                },
+                "I": {
+                  "pick": [
+                    1,
+                    2,
+                    3
+                  ]
+                }
+              },
+              "answer": "V / I",
+              "where": [
+                "V / I == round(V / I)"
+              ]
+            },
+            "2": {
+              "vars": {
+                "V": {
+                  "pick": [
+                    4.5,
+                    6,
+                    9,
+                    12
+                  ]
+                },
+                "I": {
+                  "pick": [
+                    0.1,
+                    0.2,
+                    0.25,
+                    0.5
+                  ]
+                }
+              },
+              "answer": "V / I",
+              "dp": 1
+            },
+            "3": {
+              "vars": {
+                "V": {
+                  "pick": [
+                    4.5,
+                    6,
+                    9,
+                    12
+                  ]
+                },
+                "I": {
+                  "pick": [
+                    100,
+                    150,
+                    200,
+                    250,
+                    500
+                  ]
+                }
+              },
+              "answer": "V / (I / 1000)",
+              "dp": 1
+            }
+          },
+          "explain": {
+            "1": "R = V ÷ I = {V} ÷ {I} = {answer} Ω.",
+            "2": "R = V ÷ I = {V} ÷ {I} = {answer} Ω.",
+            "3": "R = V ÷ I = {V} ÷ ({I} ÷ 1000) = {answer} Ω."
+          },
+          "wrong": [
+            {
+              "expr": "V * I",
+              "why": "That multiplies. To find squeeze, divide: R = V ÷ I."
+            }
+          ],
+          "hints": [
+            "Rearrange V = I × R to get R on its own.",
+            "R = V ÷ I.",
+            "V is {V}. I is {I}."
+          ]
         },
         {
-          "prompt": "A circuit has a 12 V push and 0.5 A flows. What is the resistance in ohms?",
-          "unit": "Ω",
-          "answer": 24,
-          "explain": "R = V ÷ I = 12 ÷ 0.5 = 24 Ω.",
-          "wrong": [{ "value": 6, "why": "That is 12 × 0.5. To find the squeeze we divide: R = V ÷ I." }],
-          "hints": ["Rearrange V = I × R to get R.", "R = V ÷ I.", "12 ÷ 0.5 = 24."]
+          "prompt": {
+            "1": "A part has a squeeze of {R} Ω and {I} A flows through it. How many volts of push does it use?",
+            "2": "A part has a squeeze of {R} Ω and {I} A flows through it. How many volts of push does it use?",
+            "3": "A {R} Ω part carries {I} mA. What voltage is across it, in volts?"
+          },
+          "unit": "V",
+          "gen": {
+            "1": {
+              "vars": {
+                "I": {
+                  "pick": [
+                    1,
+                    2,
+                    3
+                  ]
+                },
+                "R": {
+                  "pick": [
+                    2,
+                    3,
+                    4,
+                    5
+                  ]
+                }
+              },
+              "answer": "I * R"
+            },
+            "2": {
+              "vars": {
+                "I": {
+                  "pick": [
+                    0.1,
+                    0.2,
+                    0.5
+                  ]
+                },
+                "R": {
+                  "pick": [
+                    10,
+                    20,
+                    30,
+                    40
+                  ]
+                }
+              },
+              "answer": "I * R",
+              "dp": 2
+            },
+            "3": {
+              "vars": {
+                "I": {
+                  "pick": [
+                    100,
+                    200,
+                    250
+                  ]
+                },
+                "R": {
+                  "pick": [
+                    10,
+                    20,
+                    50
+                  ]
+                }
+              },
+              "answer": "I / 1000 * R",
+              "dp": 2
+            }
+          },
+          "explain": {
+            "1": "V = I × R = {I} × {R} = {answer} V.",
+            "2": "V = I × R = {I} × {R} = {answer} V.",
+            "3": "V = I × R = ({I} ÷ 1000) × {R} = {answer} V."
+          },
+          "wrong": [
+            {
+              "expr": "I / R",
+              "why": "That divides. Push = flow × squeeze, so multiply."
+            }
+          ],
+          "hints": [
+            "V = I × R is straight from the Formula Book.",
+            "Multiply the two numbers.",
+            "I is {I} and R is {R}."
+          ]
+        },
+        {
+          "prompt": "A robot part uses {mA} mA. How many amps is that?",
+          "unit": "A",
+          "gen": {
+            "vars": {
+              "mA": {
+                "pick": [
+                  500,
+                  250,
+                  100,
+                  50,
+                  20
+                ]
+              }
+            },
+            "answer": "mA / 1000",
+            "dp": 3
+          },
+          "explain": "1000 mA make 1 A, so {mA} ÷ 1000 = {answer} A.",
+          "wrong": [
+            {
+              "expr": "mA * 1000",
+              "why": "That goes the wrong way. mA are small, so the number of amps is smaller: divide by 1000."
+            }
+          ],
+          "hints": [
+            "There are 1000 milliamps in 1 amp.",
+            "Amps are bigger, so you need fewer of them. Divide.",
+            "{mA} ÷ 1000."
+          ]
         }
       ]
     }

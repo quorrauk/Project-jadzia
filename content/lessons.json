@@ -1,1 +1,5 @@
-{ "lessons": [ { "id": "ignition", "file": "projects/ignition.json", "title": "Ignition", "blurb": "Get a bulb glowing on the launch pad." } ] }
+{ "lessons": [
+  { "id": "ignition", "file": "projects/ignition.json", "title": "Ignition", "blurb": "Get a bulb glowing on the launch pad." },
+  { "id": "headlights", "file": "projects/headlights.json", "title": "Headlights", "blurb": "Light an LED without it retiring early." },
+  { "id": "dimmer", "file": "projects/dimmer.json", "title": "Dimmer", "blurb": "Set the glow with a variable resistor." }
+] }

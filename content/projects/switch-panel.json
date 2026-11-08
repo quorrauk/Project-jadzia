@@ -1,0 +1,942 @@
+{
+  "id": "switch-panel",
+  "title": "Switch Panel",
+  "arc": 1,
+  "stages": [
+    {
+      "type": "briefing",
+      "lines": [
+        "Rover needs backup lights. If one bulb dies mid-mission, the other must stay on.",
+        "That means choosing how to wire two bulbs. There are two ways, and they behave very differently."
+      ]
+    },
+    {
+      "type": "learn",
+      "toy": {
+        "kind": "series-parallel",
+        "prompt": "Switch between the two ways and read what changes."
+      },
+      "chunks": {
+        "1": [
+          "Wire two bulbs one after the other and that is [[series]]. They share the push, so both are dim.",
+          "Wire them side by side and that is [[parallel]]. Each gets the full push, so both are bright.",
+          "Side by side is great for backup lights. But the [[battery]] works harder, so it runs out sooner."
+        ],
+        "2": [
+          "In [[series]] the same [[current]] flows through both and the [[voltage]] is shared. In [[parallel]] each path gets the full [[voltage]] and the currents add.",
+          "Equal bulbs in parallel: twice the current from the battery, so the battery drains twice as fast."
+        ],
+        "3": [
+          "[[series]]: R_total = R1 + R2, one current, voltage divides. [[parallel]]: 1/R_total = 1/R1 + 1/R2, one voltage, currents add.",
+          "Bulb power goes as V²/R. Half the voltage across each series bulb means a quarter of the power, so they are dim. And on a battery too big for one bulb, two in series can be exactly right."
+        ]
+      },
+      "help": {
+        "1": "Series is a single lane. Parallel is two lanes.",
+        "2": "Traffic: one road with two toll booths in a row is slow (series). Two roads, one booth each, is fast (parallel).",
+        "3": "Try both buttons and read the line of words under them.",
+        "4": "Press series, then parallel. Notice: series is dim, parallel is bright."
+      }
+    },
+    {
+      "type": "equation",
+      "formula": "parallel-resistance",
+      "intro": {
+        "1": "Side by side, more can flow, so the total squeeze goes down.",
+        "2": "Two paths side by side: the total [[resistance]] is smaller than either. Into the Formula Book.",
+        "3": "1/R_total = 1/R1 + 1/R2, or (R1 × R2) ÷ (R1 + R2) for two. Into the Formula Book."
+      }
+    },
+    {
+      "type": "example",
+      "title": "Worked example",
+      "steps": {
+        "1": [
+          "Two bulbs, each 20 Ω, side by side.",
+          "Two the same share the job. The total is half.",
+          "20 ÷ 2 = 10.",
+          "Total squeeze: 10 Ω."
+        ],
+        "2": [
+          "A 20 Ω path and a 30 Ω path side by side.",
+          "Multiply them: 20 × 30 = 600.",
+          "Add them: 20 + 30 = 50.",
+          "Divide: 600 ÷ 50 = 12. Total: 12 Ω, smaller than both."
+        ]
+      }
+    },
+    {
+      "type": "try",
+      "title": "Try one",
+      "questions": [
+        {
+          "prompt": {
+            "1": "Two {R} Ω paths side by side. What is the total squeeze, in ohms?",
+            "2": "A {R1} Ω path and a {R2} Ω path side by side. What is the total squeeze, in ohms?",
+            "3": "A {V} V battery feeds a {R1} Ω path and a {R2} Ω path in parallel. How many mA does the battery supply?"
+          },
+          "unit": {
+            "1": "Ω",
+            "2": "Ω",
+            "3": "mA"
+          },
+          "gen": {
+            "1": {
+              "vars": {
+                "R": {
+                  "pick": [
+                    10,
+                    20,
+                    40,
+                    60
+                  ]
+                }
+              },
+              "answer": "R / 2"
+            },
+            "2": {
+              "vars": {
+                "R1": {
+                  "pick": [
+                    10,
+                    15,
+                    20,
+                    30,
+                    60
+                  ]
+                },
+                "R2": {
+                  "pick": [
+                    10,
+                    15,
+                    20,
+                    30,
+                    60
+                  ]
+                }
+              },
+              "answer": "R1 * R2 / (R1 + R2)",
+              "where": [
+                "R1 * R2 / (R1 + R2) == round(R1 * R2 / (R1 + R2) * 10) / 10"
+              ],
+              "dp": 1
+            },
+            "3": {
+              "vars": {
+                "V": {
+                  "pick": [
+                    6,
+                    9
+                  ]
+                },
+                "R1": {
+                  "pick": [
+                    20,
+                    30,
+                    60
+                  ]
+                },
+                "R2": {
+                  "pick": [
+                    20,
+                    30,
+                    60
+                  ]
+                }
+              },
+              "answer": "V / Rt * 1000",
+              "derived": {
+                "Rt": "R1 * R2 / (R1 + R2)"
+              },
+              "dp": 1
+            }
+          },
+          "explain": {
+            "1": "Two the same share the job, so the total is half: {R} ÷ 2 = {answer} Ω.",
+            "2": "(R1 × R2) ÷ (R1 + R2) = ({R1} × {R2}) ÷ ({R1} + {R2}) = {answer} Ω.",
+            "3": "R_total = ({R1} × {R2}) ÷ ({R1} + {R2}) = {Rt} Ω. I = {V} ÷ {Rt} = {answer} mA."
+          },
+          "wrong": [
+            {
+              "expr": "R / 1",
+              "why": "Side by side makes the squeeze go DOWN, not stay the same."
+            }
+          ],
+          "hints": [
+            "Side by side means the total is smaller than either path.",
+            "Two the same: halve it. Different: multiply, then divide by the sum.",
+            "Use your Formula Book."
+          ]
+        }
+      ],
+      "help": {
+        "1": "Side by side, the total goes down.",
+        "2": "Two doors instead of one: more people get through, so the door squeeze is smaller.",
+        "3": "Example: 20 Ω and 20 Ω in parallel is 10 Ω.",
+        "4": "Watch: multiply your two numbers, add them, then divide. Try again."
+      }
+    },
+    {
+      "type": "mission",
+      "title": "Backup lights",
+      "parts": [
+        "battery",
+        "switch",
+        "bulb"
+      ],
+      "goal": {
+        "all": [
+          {
+            "type": "lit",
+            "part": "bulb",
+            "min": 2,
+            "brightness": 0.8
+          },
+          {
+            "type": "no-burnt"
+          }
+        ]
+      },
+      "scenarios": [
+        {
+          "id": "small-pack",
+          "battery": 4.5,
+          "story": "Backup lights on a 4.5 V pack. Both bulbs must be bright. Series would leave them dim.",
+          "solution": {
+            "build": [
+              {
+                "type": "battery",
+                "x": 3,
+                "y": 2,
+                "rot": 1
+              },
+              {
+                "type": "switch",
+                "x": 6,
+                "y": 2,
+                "params": {
+                  "closed": true
+                }
+              },
+              {
+                "type": "bulb",
+                "x": 12,
+                "y": 2,
+                "rot": 1
+              },
+              {
+                "type": "bulb",
+                "x": 16,
+                "y": 2,
+                "rot": 1
+              }
+            ],
+            "wires": [
+              [
+                "B1.a",
+                "SW1.a"
+              ],
+              [
+                "SW1.b",
+                "BULB1.a"
+              ],
+              [
+                "BULB1.a",
+                "BULB2.a"
+              ],
+              [
+                "BULB1.b",
+                "B1.b"
+              ],
+              [
+                "BULB2.b",
+                "BULB1.b"
+              ]
+            ]
+          },
+          "tiers": {
+            "training": {
+              "start": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": false
+                    }
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 12,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 16,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "BULB1.a"
+                  ],
+                  [
+                    "BULB1.a",
+                    "BULB2.a"
+                  ],
+                  [
+                    "BULB1.b",
+                    "B1.b"
+                  ],
+                  [
+                    "BULB2.b",
+                    "BULB1.b"
+                  ]
+                ]
+              }
+            },
+            "stretch": {
+              "solution": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 8,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 12,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 16,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "B1.a",
+                    "SW2.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "BULB1.a"
+                  ],
+                  [
+                    "SW2.b",
+                    "BULB2.a"
+                  ],
+                  [
+                    "BULB1.b",
+                    "B1.b"
+                  ],
+                  [
+                    "BULB2.b",
+                    "B1.b"
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "mid-pack",
+          "battery": 6,
+          "story": "A 6 V pack. Both bulbs must shine at full strength.",
+          "solution": {
+            "build": [
+              {
+                "type": "battery",
+                "x": 3,
+                "y": 2,
+                "rot": 1
+              },
+              {
+                "type": "switch",
+                "x": 6,
+                "y": 2,
+                "params": {
+                  "closed": true
+                }
+              },
+              {
+                "type": "bulb",
+                "x": 12,
+                "y": 2,
+                "rot": 1
+              },
+              {
+                "type": "bulb",
+                "x": 16,
+                "y": 2,
+                "rot": 1
+              }
+            ],
+            "wires": [
+              [
+                "B1.a",
+                "SW1.a"
+              ],
+              [
+                "SW1.b",
+                "BULB1.a"
+              ],
+              [
+                "BULB1.a",
+                "BULB2.a"
+              ],
+              [
+                "BULB1.b",
+                "B1.b"
+              ],
+              [
+                "BULB2.b",
+                "BULB1.b"
+              ]
+            ]
+          },
+          "tiers": {
+            "training": {
+              "start": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": false
+                    }
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 12,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 16,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "BULB1.a"
+                  ],
+                  [
+                    "BULB1.a",
+                    "BULB2.a"
+                  ],
+                  [
+                    "BULB1.b",
+                    "B1.b"
+                  ],
+                  [
+                    "BULB2.b",
+                    "BULB1.b"
+                  ]
+                ]
+              }
+            },
+            "stretch": {
+              "solution": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 8,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 12,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 16,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "B1.a",
+                    "SW2.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "BULB1.a"
+                  ],
+                  [
+                    "SW2.b",
+                    "BULB2.a"
+                  ],
+                  [
+                    "BULB1.b",
+                    "B1.b"
+                  ],
+                  [
+                    "BULB2.b",
+                    "B1.b"
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "big-pack",
+          "battery": 9,
+          "story": "A big 9 V pack. One bulb alone would pop. Two bulbs, both bright, none burnt.",
+          "solution": {
+            "build": [
+              {
+                "type": "battery",
+                "x": 3,
+                "y": 2,
+                "rot": 1
+              },
+              {
+                "type": "switch",
+                "x": 6,
+                "y": 2,
+                "params": {
+                  "closed": true
+                }
+              },
+              {
+                "type": "bulb",
+                "x": 21,
+                "y": 2,
+                "rot": 1
+              }
+            ],
+            "wires": [
+              [
+                "B1.a",
+                "SW1.a"
+              ],
+              [
+                "SW1.b",
+                "BULB1.a"
+              ],
+              [
+                "BULB1.b",
+                "B1.b"
+              ]
+            ]
+          },
+          "tiers": {
+            "training": {
+              "start": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": false
+                    }
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 21,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "BULB1.a"
+                  ],
+                  [
+                    "BULB1.b",
+                    "B1.b"
+                  ]
+                ]
+              }
+            },
+            "stretch": {
+              "solution": {
+                "build": [
+                  {
+                    "type": "battery",
+                    "x": 3,
+                    "y": 2,
+                    "rot": 1
+                  },
+                  {
+                    "type": "switch",
+                    "x": 6,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 11,
+                    "y": 2
+                  },
+                  {
+                    "type": "switch",
+                    "x": 16,
+                    "y": 2,
+                    "params": {
+                      "closed": true
+                    }
+                  },
+                  {
+                    "type": "bulb",
+                    "x": 21,
+                    "y": 2,
+                    "rot": 1
+                  }
+                ],
+                "wires": [
+                  [
+                    "B1.a",
+                    "SW1.a"
+                  ],
+                  [
+                    "SW1.b",
+                    "BULB1.a"
+                  ],
+                  [
+                    "BULB1.b",
+                    "SW2.a"
+                  ],
+                  [
+                    "SW2.b",
+                    "BULB2.a"
+                  ],
+                  [
+                    "BULB2.b",
+                    "B1.b"
+                  ]
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "tiers": {
+        "training": {
+          "text": "Training: the bulbs are already wired. Close the switch."
+        },
+        "standard": {
+          "text": "Wire two bulbs so BOTH are bright and neither pops. Work out series or parallel from the battery.",
+          "start": "empty"
+        },
+        "stretch": {
+          "text": "Stretch: same, but give each bulb its own switch.",
+          "start": "empty",
+          "goal": {
+            "all": [
+              {
+                "type": "lit",
+                "part": "bulb",
+                "min": 2,
+                "brightness": 0.8
+              },
+              {
+                "type": "has",
+                "part": "switch",
+                "min": 2
+              },
+              {
+                "type": "no-burnt"
+              }
+            ]
+          }
+        }
+      },
+      "hints": [
+        "Bright means each bulb needs close to the battery's full push across it.",
+        "Small battery: each bulb needs the whole push, so side by side. Big battery: one bulb would pop, so share the push in a line.",
+        "Parallel: two paths from the battery + to the battery −, one bulb on each."
+      ],
+      "help": {
+        "1": "Small battery: side by side. Big battery: one after the other.",
+        "2": "Think of how much push each bulb needs, and how much it can take.",
+        "3": "A bulb is happiest with about 4.5 V across it.",
+        "4": "Switch to Training. See the wiring. Then build your own."
+      }
+    },
+    {
+      "type": "debrief",
+      "lines": [
+        "Parallel bulbs each get the full push, so both are bright. If one fails, the other stays on.",
+        "Series bulbs share the push, so on a small battery both are dim. On a big battery that sharing is exactly what saves them.",
+        "Next: how much energy all of this uses, and how long the battery lasts."
+      ]
+    },
+    {
+      "type": "python",
+      "title": "Words and numbers",
+      "task": "Python treats words and numbers differently. Words go in quotes. An f-string lets you put a number inside a sentence.",
+      "starter": "name = \"Rover\"\nbulbs = 2\ncurrent = 0.45\nprint(f\"{name} has {bulbs} bulbs drawing {current} A\")\n",
+      "expect": [
+        {
+          "kind": "code-contains",
+          "text": "f\""
+        },
+        {
+          "kind": "any-output"
+        }
+      ],
+      "hints": [
+        "The f before the quote lets you use {curly brackets}.",
+        "Change bulbs to 3 and run it again."
+      ],
+      "help": {
+        "1": "Words go in quote marks. Numbers do not.",
+        "2": "\"hello\" is words. 5 is a number. They are different types.",
+        "3": "f\"Hi {name}\" puts the value of name into the sentence.",
+        "4": "Copy the starter and run it. Change the name."
+      }
+    },
+    {
+      "type": "maths",
+      "title": "Maths check",
+      "questions": [
+        {
+          "prompt": "Bulb A draws {a} mA and bulb B draws {b} mA, side by side. How many mA does the battery supply?",
+          "unit": "mA",
+          "gen": {
+            "1": {
+              "vars": {
+                "a": {
+                  "pick": [
+                    100,
+                    200,
+                    300
+                  ]
+                },
+                "b": {
+                  "pick": [
+                    100,
+                    200,
+                    300
+                  ]
+                }
+              },
+              "answer": "a + b"
+            },
+            "2": {
+              "vars": {
+                "a": {
+                  "pick": [
+                    120,
+                    150,
+                    225,
+                    300
+                  ]
+                },
+                "b": {
+                  "pick": [
+                    80,
+                    150,
+                    225
+                  ]
+                }
+              },
+              "answer": "a + b"
+            },
+            "3": {
+              "vars": {
+                "a": {
+                  "pick": [
+                    120,
+                    150,
+                    225,
+                    300
+                  ]
+                },
+                "b": {
+                  "pick": [
+                    80,
+                    150,
+                    225
+                  ]
+                }
+              },
+              "answer": "a + b"
+            }
+          },
+          "explain": "Side by side, the currents add: {a} + {b} = {answer} mA.",
+          "wrong": [
+            {
+              "expr": "a * b",
+              "why": "Add the two currents, do not multiply."
+            }
+          ],
+          "hints": [
+            "Each path takes its own current from the battery.",
+            "The battery supplies all of them.",
+            "{a} + {b}."
+          ]
+        },
+        {
+          "prompt": "Bulb A draws {a} mA and bulb B draws {b} mA. How many times more does A draw than B?",
+          "unit": "×",
+          "gen": {
+            "vars": {
+              "a": {
+                "pick": [
+                  200,
+                  300,
+                  400,
+                  600
+                ]
+              },
+              "b": {
+                "pick": [
+                  100,
+                  200
+                ]
+              }
+            },
+            "answer": "a / b",
+            "where": [
+              "a / b == round(a / b * 4) / 4"
+            ]
+          },
+          "explain": "A ÷ B = {a} ÷ {b} = {answer}. The ratio is {answer} : 1.",
+          "wrong": [
+            {
+              "expr": "b / a",
+              "why": "That is B ÷ A, the wrong way round. The question puts A on top."
+            }
+          ],
+          "hints": [
+            "\"How many times more\" means divide.",
+            "A over B.",
+            "{a} ÷ {b}."
+          ]
+        },
+        {
+          "prompt": "Work out 1/{R1} + 1/{R2}. Give your answer as a decimal to 4 places.",
+          "unit": "",
+          "gen": {
+            "vars": {
+              "R1": {
+                "pick": [
+                  10,
+                  20,
+                  30,
+                  60
+                ]
+              },
+              "R2": {
+                "pick": [
+                  10,
+                  20,
+                  30,
+                  60
+                ]
+              }
+            },
+            "answer": "1 / R1 + 1 / R2",
+            "dp": 4
+          },
+          "explain": "1/{R1} + 1/{R2} = {answer}. Flip that over (1 ÷ {answer}) to get the parallel resistance.",
+          "wrong": [
+            {
+              "expr": "2 / (R1 + R2)",
+              "why": "You cannot add the bottoms of fractions. Work out each fraction as a decimal, then add."
+            }
+          ],
+          "hints": [
+            "Work out 1 ÷ {R1} and 1 ÷ {R2} separately.",
+            "Then add the two decimals.",
+            "A calculator helps."
+          ]
+        }
+      ]
+    }
+  ]
+}
