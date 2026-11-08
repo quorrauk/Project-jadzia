@@ -9,6 +9,8 @@ npm test
 
 Runs `node --test "tests/unit/**/*.test.js"`. Covers config shape and the progress store. Solver tests (`tests/unit/solver.test.js`) cover the kickoff hand-calculated cases, a Wheatstone bridge, series LEDs, switch, bulb, edge cases (open, short, floating, wire loops, conflicting batteries) and 600 seeded random networks checked against Kirchhoff's current law. Hand-calculation working is in comments above each case. Sandbox tests (`sandbox-model.test.js`, `sandbox-readouts.test.js`) cover placing, overlap, wiring, netlist building, burn-out and repair, KCL on built boards, number formatting and the readout text at each level. Currently 100 unit tests; 74 e2e (37 per viewport).
 
+Lessons: `lessons.test.js` and `generate.test.js` cover the engine, the expression parser, seeded generation, the adaptive tracker and content QA of every lesson in `content/lessons.json`. 128 unit tests in total. `tests/e2e/lessons.spec.js` plays Ignition through; it still assumes fixed answers and needs updating for generated numbers.
+
 ## End to end (Playwright)
 
 ```

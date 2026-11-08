@@ -33,3 +33,10 @@ Newest first.
 - **Burnt parts stay burnt until Repair.** Burnt parts are left out of the netlist, so the circuit opens. Never a dead end: Repair, Clear and the starter circuit are always available.
 - **Readouts depend on level, not on lesson.** Level 1 says push/flow in plain words; each level up adds one idea (V/I/R, power, Kirchhoff, node table). Switching level is instant.
 - **Tapping anywhere places an armed part.** Found in e2e: requiring an empty-background tap made placing fail on a tablet when the spot held a part.
+
+- **Level adapts, but the learner decides.** Auto level is on by default: 3 clean answers in a row moves up one level at the next stage, 2 struggles moves down. A banner says so with "Keep my level". Switching auto off turns the moves into suggestions. Picking a level by hand always wins and resets the counts. Owner asked for both adaptive and manual.
+- **Numbers are generated, not written.** A question carries a template (variables per level, derived values, constraints, an answer expression). Each play draws new numbers, so replays are not the same test. A small expression parser is used instead of eval().
+- **Replay means new numbers and a new scenario.** Missions carry 3 scenarios (story, battery, targets); a replay cycles to the next one.
+- **Every mission must be provably winnable.** Each scenario and tier ships a solution board, and a unit test solves it with the real solver. The start board must not already meet the goal. This is what stops an unwinnable mission shipping.
+- **Never stuck in a question.** Wrong twice reveals "Show me the answer", which unlocks Next. A mission can be skipped, but earns no patch until its goal is met.
+- **Python stages are data until step 6.** Content already has task, starter code and expected output rules, so authoring is not blocked.
