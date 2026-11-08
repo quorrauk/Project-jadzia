@@ -18,7 +18,7 @@ Steps 1, 2 and 3a done. Live site confirmed loading by the owner.
 ## Next 3 steps
 
 1. Step 4: lesson engine (9 stages from JSON, Training/Standard/Stretch tiers, four-rung help ladder, level variants), Formula Book, glossary.
-3. Step 5: Arc 1 content, project by project, levels 1-3.
+2. Step 5: Arc 1 content, project by project, levels 1-3.
 
 ## Open questions
 

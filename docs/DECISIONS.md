@@ -27,3 +27,9 @@ Newest first.
 - **Progress store is DOM-free with injected storage.** Lets unit tests run in plain node with no browser.
 - **Pages workflow stages only `index.html`, `config`, `src`, `content`.** Keeps tests and docs out of the deployed site.
 - **Candidate ID format `<initials>-<6 chars>`, no I/O/0/1.** Avoids look-alike characters on a tablet screen.
+
+- **Sandbox model separate from the engine.** `src/sandbox/model.js` holds the board (grid, parts, wires) and builds a netlist; the solver never sees the board. Drawing is in `glyphs.js`.
+- **Parts are 4 grid steps long with terminals `.a`/`.b`; wires are 1 mOhm components.** Same wire model as the solver, so loops and short circuits behave.
+- **Burnt parts stay burnt until Repair.** Burnt parts are left out of the netlist, so the circuit opens. Never a dead end: Repair, Clear and the starter circuit are always available.
+- **Readouts depend on level, not on lesson.** Level 1 says push/flow in plain words; each level up adds one idea (V/I/R, power, Kirchhoff, node table). Switching level is instant.
+- **Tapping anywhere places an armed part.** Found in e2e: requiring an empty-background tap made placing fail on a tablet when the spot held a part.

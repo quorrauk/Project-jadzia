@@ -101,4 +101,4 @@ Plugin contract:
 | `initState(comp)` / `updateState(comp, volts, state)` | nonlinear only | Return true from `updateState` if the state changed. |
 | `readout(comp, volts, extra, state)` | yes | Return `{ current, voltage, power, ...extras }`. `extra.sourceCurrent` is the MNA current for parts with a voltage source. |
 | `flags(comp, readout)` | no | Return `[{ type, message }]`. |
-| `draw` | later | Drawing for the sandbox is added at step 3. |
+| `draw` | no, not used | Drawing lives in `src/sandbox/glyphs.js`, keyed by part type, so the solver stays free of DOM and drawing code. A new part needs an entry in `src/sandbox/model.js` (`PART_TYPES`) and in `glyphs.js`. |
