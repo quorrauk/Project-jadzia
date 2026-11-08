@@ -164,6 +164,11 @@ function start(config, store) {
       el('p', { class: 'status' }, profile.guest ? 'STATUS: GUEST (NOTHING IS SAVED)' : 'STATUS: CANDIDATE ACTIVE'),
     );
 
+    const top = el('div', { class: 'row' });
+    top.append(button('Open workshop', 'open-workshop', () => renderWorkshop(store.getActive())));
+    top.firstChild.style.marginTop = '0';
+    panel.append(top);
+
     const badge = el('div', { class: 'badge', 'data-testid': 'badge' });
     badge.append(
       el('div', { class: 'eyebrow' }, 'Candidate ID'),
@@ -184,7 +189,6 @@ function start(config, store) {
 
     const actions = el('div', { class: 'row' });
     actions.append(
-      button('Open workshop', 'open-workshop', () => renderWorkshop(store.getActive())),
       button(profile.guest ? 'Leave guest mode' : 'Switch candidate', 'switch-profile', () => {
         store.leave();
         render();
