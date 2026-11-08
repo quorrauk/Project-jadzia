@@ -6,8 +6,8 @@ Status values: `planned`, `in-progress`, `done`.
 
 | Step | Item | Status |
 |------|------|--------|
-| 1 | Walking skeleton (site, CI, Pages) | in-progress |
-| 2 | DC solver with hand-calculated tests | planned |
+| 1 | Walking skeleton (site, CI, Pages) | done |
+| 2 | DC solver with hand-calculated tests | done |
 | 3 | Sandbox UI | planned |
 | 4 | Lesson engine, Formula Book, glossary | planned |
 | 5 | Arc 1 content (6 projects) | planned |

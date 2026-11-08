@@ -7,7 +7,7 @@ npm install
 npm test
 ```
 
-Runs `node --test "tests/unit/**/*.test.js"`. Covers config shape and the progress store. Solver tests land in step 2.
+Runs `node --test "tests/unit/**/*.test.js"`. Covers config shape and the progress store. Solver tests (`tests/unit/solver.test.js`) cover the kickoff hand-calculated cases, a Wheatstone bridge, series LEDs, switch, bulb, edge cases (open, short, floating, wire loops, conflicting batteries) and 600 seeded random networks checked against Kirchhoff's current law. Hand-calculation working is in comments above each case.
 
 ## End to end (Playwright)
 
